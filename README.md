@@ -1,20 +1,25 @@
-# Introduction 
-TODO: Give a short introduction of your project. Let this section explain the objectives or the motivation behind this project. 
-
-# Getting Started
-TODO: Guide users through getting your code up and running on their own system. In this section you can talk about:
-1.	Installation process
-2.	Software dependencies
-3.	Latest releases
-4.	API references
-
-# Build and Test
-TODO: Describe and show how to build your code and run the tests. 
-
-# Contribute
-TODO: Explain how other users and developers can contribute to make your code better. 
-
-If you want to learn more about creating good readme files then refer the following [guidelines](https://docs.microsoft.com/en-us/azure/devops/repos/git/create-a-readme?view=azure-devops). You can also seek inspiration from the below readme files:
-- [ASP.NET Core](https://github.com/aspnet/Home)
-- [Visual Studio Code](https://github.com/Microsoft/vscode)
-- [Chakra Core](https://github.com/Microsoft/ChakraCore)
+#Mandatory Requirements
+1. The users should be allowed to view the ratings and reviews of any products without logging in.
+2. Rating or Reviewing
+3. Should require a login
+4. A user should be able to rate/review a product only once
+5. Users can rate/review a product again only after deleting their current selection.
+#Product List Page
+1. List of products
+2. Basic Product Information (Thumbnail, Title, Release Year/Cuisine/Author/Basic Facilities)
+#Average rating
+1. Total rating count
+2. Their rating (if rated) and allowing them to rate
+3. Show login dialog if they try to rate but are not logged in
+4. Product Detail Page
+5. Basic Product Information as mentioned above (at least)
+6. Average rating
+7. Total rating count
+8. Their rating (if rated) and allowing them to rate
+#Review count
+1. All reviews with their review at the top (if reviewed)
+2. Show login dialog if they try to rate/review but are not logged in
+#Optional Requirements
+1. Sorting (avg. rating, rating count, etc) and Pagination
+#Additional Product Details.
+1. Use a public API to get product details and store them in your DB.
