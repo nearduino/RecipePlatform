@@ -8,6 +8,7 @@
     <Compile Include="Model\Comment.cs" />
     <Compile Include="Model\Enums\Category.cs" />
     <Compile Include="Model\Enums\MeasureUnit.cs" />
+    <Compile Include="Model\Exceptions\InvalidIngredientQuantityException.cs" />
     <Compile Include="Model\Ingredient.cs" />
     <Compile Include="Model\Recipe.cs" />
   </ItemGroup>
