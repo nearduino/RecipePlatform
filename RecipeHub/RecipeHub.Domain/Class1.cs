@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Auth
+namespace RecipeHub.Domain
 {
     public class Class1
     {
