@@ -9,10 +9,10 @@ namespace RecipeHub.Domain.Utilities
 {
     public class TextValidator
     {
+        private static string NamePattern => @"^([A-Z][a-z]+)(([ ][A-Z]?[a-z]+)|([ ][a-z]+)|([ ][A-Z]))*$";
         public static bool CheckName(string name)
         {
-            string namePattern = @"([A-Z]{1}[a-z]+)(([ ]([A-Z]?[a-z]+))|([ ][A-Z]))*";
-            return Regex.IsMatch(name, namePattern);
+            return Regex.Match(name, NamePattern).Success;
         }
     }
 }

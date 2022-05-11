@@ -13,7 +13,7 @@ namespace RecipeHub.UnitTests
     {
         [Theory]
         [MemberData(nameof(GetCheckNameData))]
-        public void check_name_should_return_true(string name, bool shouldBe)
+        public void Check_name_should_return_true(string name, bool shouldBe)
         {
             TextValidator.CheckName(name).ShouldBe(shouldBe);
         }
@@ -43,15 +43,31 @@ namespace RecipeHub.UnitTests
             });
             retVal.Add(new object[]
             {
-                "Vitamin a a a a aa Vvvv vvv", true
+                "VitAmin a", false
             });
             retVal.Add(new object[]
             {
-                "Vitamin a a a a aa Vvvv vvv!", true
+                "Vitamin a!", false
             });
             retVal.Add(new object[]
             {
                 "Vitamin a a a a aa VVvv vvv", false
+            });
+            retVal.Add(new object[]
+            {
+                "Crni mladi luk", true
+            });
+            retVal.Add(new object[]
+            {
+                "Beli hleb", true
+            });
+            retVal.Add(new object[]
+            {
+                "Rotkvice", true
+            });
+            retVal.Add(new object[]
+            {
+                "Suncokretovo ulje", true
             });
             return retVal;
         }
