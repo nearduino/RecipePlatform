@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace RecipeHub.Domain.Model.Exceptions
 {
-    public class InvalidIngredientQuantityException : ArgumentException
+    public class InvalidCaloriesException : ArgumentException
     {
-        public InvalidIngredientQuantityException() : base("Ingredient quantity must be greater than zero")
+        public InvalidCaloriesException() : base("Calories must be greater than zero")
         {
 
         }

@@ -21,4 +21,8 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\RecipeHub.Domain\RecipeHub.Domain.csproj" />
+  </ItemGroup>
+
 </Project>

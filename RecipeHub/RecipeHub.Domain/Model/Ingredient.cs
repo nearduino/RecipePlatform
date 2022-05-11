@@ -28,6 +28,7 @@ namespace RecipeHub.Domain.Model
         private void Validate()
         {
             if (Quantity <= 0) throw new InvalidIngredientQuantityException();
+            if (Calories <= 0) throw new InvalidCaloriesException();
         }
 
     }
