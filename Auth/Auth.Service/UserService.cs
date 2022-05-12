@@ -20,7 +20,8 @@ namespace Auth.Service
     public class UserService : IUserService
     {
         List<User> db = new List<User>();
- 
+        
+
         // users hardcoded for simplicity, store in a db with hashed passwords in production applications
 
 
@@ -33,6 +34,7 @@ namespace Auth.Service
 
         public AuthenticateResponse Authenticate(AuthenticateRequest model)
         {
+            db.Add(new User("test", "test", "test", "test", "test"));
             var user = db.SingleOrDefault(x => x.Username == model.Username && x.Password == model.Password);
 
             // return null if user not found
