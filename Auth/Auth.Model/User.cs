@@ -1,29 +1,28 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Text.Json.Serialization;
 
-namespace recipe_hub
+
+namespace Auth.Model
 {
     public class User
     {
-        public string id { get; set; }
-        [Required(ErrorMessage = "Email is required")]
-        public string Email { get; set; }
+        public int Id { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
+        public string Username { get; set; }
+        public string Email { get; set; }
         public bool IsAdmin { get; set; }
 
-        [Required(ErrorMessage = "Password is required")]
-        [DataType(DataType.Password)]
+        [JsonIgnore]
         public string Password { get; set; }
 
-        [DataType(DataType.Password)]
-        [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
-        public string ConfirmPassword { get; set; }
-
-
+        public User(string fName, string lName, string uName, string mail, string pass)
+        {
+            this.Id = 4;
+            this.FirstName = fName;
+            this.LastName = lName;
+            this.Username = uName;
+            this.Email = mail;
+            this.Password = pass;
+        }
     }
 }
