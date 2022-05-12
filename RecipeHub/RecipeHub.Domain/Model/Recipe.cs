@@ -64,8 +64,9 @@ namespace RecipeHub.Domain.Model
 
         public double CalculateRecipeRating()
         {
+            if (_comments.Count == 0) throw new RecipeRatingCalculationException();
             double rating = 0;
-            foreach(Comment comment in _comments) rating += comment.Rating;
+            foreach (var comment in _comments) rating += comment.Rating;
             return rating / _comments.Count;
         }
     }

@@ -9,7 +9,7 @@ namespace RecipeHub.Domain.Model.Exceptions
     public class InvalidNameException : ArgumentException
     {
         public InvalidNameException() : base(
-            "Name should contain only A-Z and a-z characters, single-digit words must be upper case.")
+            "Name should contain only A-Z and a-z characters, single letter words must be upper case.")
         {
 
         }

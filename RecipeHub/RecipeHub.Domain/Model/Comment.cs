@@ -21,7 +21,7 @@ namespace RecipeHub.Domain.Model
 
         private void Validate()
         {
-            if(Rating is < 1 or > 10) throw new InvalidRatingException();
+            if (Rating is < 1 or > 10) throw new InvalidRatingException();
             if (Text.Length == 0) throw new ArgumentException("Text must not be empty");
         }
     }
