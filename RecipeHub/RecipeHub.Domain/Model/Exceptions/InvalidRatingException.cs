@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace RecipeHub.Domain.Model.Exceptions
 {
-    public class InvalidIngredientQuantityException : ArgumentException
+    public class InvalidRatingException : ArgumentException
     {
-        public InvalidIngredientQuantityException() : base("Ingredient quantity must be greater than zero")
+        public InvalidRatingException() : base("Rating out of range. Valid rating is from 1 to 10")
         {
 
         }

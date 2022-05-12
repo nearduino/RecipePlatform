@@ -6,28 +6,30 @@ using System.Text;
 using System.Threading.Tasks;
 using RecipeHub.Domain.Model.Enums;
 using RecipeHub.Domain.Model.Exceptions;
+using RecipeHub.Domain.Utilities;
 
 namespace RecipeHub.Domain.Model
 {
     public class Ingredient
     {
-        public int Calories { get; set; }
-        public string Name { get; set; }
-        public int Quantity { get; set; }
-        public MeasureUnit MeasureUnit { get; set; }
+        public int CaloriesPerUnit { get; private set; }
+        public string Name { get; private set; }
+        public MeasureUnit MeasureUnit { get; private set; }
+
+        private Ingredient(){}
 
         public Ingredient(int calories, string name, int quantity, MeasureUnit measureUnit)
         {
-            Calories = calories;
+            CaloriesPerUnit = calories;
             Name = name;
-            Quantity = quantity;
             MeasureUnit = measureUnit;
             Validate();
         }
 
         private void Validate()
         {
-            if (Quantity <= 0) throw new InvalidIngredientQuantityException();
+            if (CaloriesPerUnit <= 0) throw new InvalidCaloriesException();
+            if (!TextValidator.CheckName(Name)) throw new InvalidNameException();
         }
 
     }
