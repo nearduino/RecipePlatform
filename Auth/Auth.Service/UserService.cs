@@ -7,6 +7,8 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using Auth.Model;
+using System.Net.Mail;
+
 namespace Auth.Service
 {
     
@@ -51,14 +53,27 @@ namespace Auth.Service
         public RegistrationResponse Registration(RegistrationRequest model)
         {
             db.Users.Add(new User("test", "test", "test", "test", "test"));
+            RegistrationResponse rr;
             foreach (var u in db.Users)
             {
                 if (u.Username.Equals(model.Username))
                 {
-                    return null;
+
+                    rr = new RegistrationResponse("Username is already taken!");
+                    return rr;
                     
                 }
-            } 
+                else if (u.Email.Equals(model.Email))
+                {
+                    rr = new RegistrationResponse("Email is already taken!");
+                    return rr;
+                }
+            }
+            if (!IsValid(model.Email))
+            {
+                rr = new RegistrationResponse("Invalid email format!");
+                return rr;
+            }
             User user = new User(model.FirstName, model.LastName, model.Username, model.Email, model.Password);
             db.Users.Add(user);
 
@@ -68,7 +83,27 @@ namespace Auth.Service
             return new RegistrationResponse(user, token);
         }
 
-        public IEnumerable<User> GetAll()
+        bool IsValid(string email)
+        {
+            
+            var trimmedEmail = email.Trim();
+
+            if (trimmedEmail.EndsWith("."))
+            {
+                return false; // suggested by @TK-421
+            }
+            try
+            {
+                var addr = new System.Net.Mail.MailAddress(email);
+                return addr.Address == trimmedEmail;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+            public IEnumerable<User> GetAll()
         {
             return db.Users;
         }

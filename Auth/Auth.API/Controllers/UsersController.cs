@@ -34,7 +34,15 @@ namespace Auth.API.Controllers
             if (response == null)
                 return BadRequest(new { message = "Username or password is incorrect" });
 
-            return Ok(response);
+            if (!response.Status)
+            {
+                return BadRequest(new { message = response.Message });
+            }
+            else
+            {
+                return Ok(response);
+            }
+            
         }
 
         [HttpGet]
