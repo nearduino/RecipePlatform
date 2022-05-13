@@ -1,19 +1,28 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Text.Json.Serialization;
 
-namespace recipe_hub
+
+namespace Auth.Model
 {
     public class User
     {
-        public string Email { get; set; }
+        public int Id { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
+        public string Username { get; set; }
+        public string Email { get; set; }
         public bool IsAdmin { get; set; }
+
+        [JsonIgnore]
         public string Password { get; set; }
 
-
+        public User(string fName, string lName, string uName, string mail, string pass)
+        {
+            this.Id = 4;
+            this.FirstName = fName;
+            this.LastName = lName;
+            this.Username = uName;
+            this.Email = mail;
+            this.Password = pass;
+        }
     }
 }
