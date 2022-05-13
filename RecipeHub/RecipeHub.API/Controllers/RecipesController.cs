@@ -25,7 +25,7 @@ namespace RecipeHub.API.Controllers
         [HttpGet("{id:int}")]
         public IActionResult GetById(int id)
         {
-            return Ok(_receiptRepo.GetById(id, LoadType.Eager));
+            return Ok(_receiptRepo.GetById(id, FetchType.Eager));
         }
     }
 }

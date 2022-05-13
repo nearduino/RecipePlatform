@@ -11,6 +11,8 @@ namespace RecipeHub.Infrastructure.Repositories
 {
     public interface IIngredientRepository : IBaseRepository<int, IngredientDbo>
     {
-        public IngredientDbo getById(int id);
+        public IngredientDbo GetById(int id);
+
+        public IEnumerable<IngredientDbo> GetByIds(IEnumerable<int> ids);
     }
 }

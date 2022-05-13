@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace RecipeHub.Infrastructure.Repositories.Enums
 {
-    public enum LoadType
+    public enum FetchType
     {
         Lazy,
         Eager

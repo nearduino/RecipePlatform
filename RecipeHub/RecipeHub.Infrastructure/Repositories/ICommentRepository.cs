@@ -11,6 +11,6 @@ namespace RecipeHub.Infrastructure.Repositories
 {
     public interface ICommentRepository : IBaseRepository<int, CommentDbo>
     {
-        public CommentDbo getById(int id, LoadType loadType = LoadType.Lazy);
+        public CommentDbo getById(int id, FetchType fetchType = FetchType.Lazy);
     }
 }

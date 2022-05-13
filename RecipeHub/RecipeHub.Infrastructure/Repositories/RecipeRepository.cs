@@ -16,11 +16,15 @@ namespace RecipeHub.Infrastructure.Repositories
         public RecipeRepository(AppDbContext context) : base(context)
         {
         }
-        public RecipeDbo GetById(int id, LoadType loadType)
+        public RecipeDbo GetById(int id, FetchType fetchType)
         {
-            var set = GetAll();
-            if (loadType == LoadType.Eager) return set.Include(r => r.CommentsDbo).First(r => r.Id == id);
-            return set.First(r => r.Id == id);
+            var recipes = GetAll();
+            if (fetchType == FetchType.Eager) return recipes.
+                Include(r => r.CommentsDbo).
+                Include(r => r.RecipeIngredientsDbo).
+                ThenInclude(r => r.Ingredient).
+                First(r => r.Id == id);
+            return recipes.First(r => r.Id == id);
         }
     }
 }
