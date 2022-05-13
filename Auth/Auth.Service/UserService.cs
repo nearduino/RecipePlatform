@@ -9,18 +9,20 @@ using System.Text;
 using Auth.Model;
 namespace Auth.Service
 {
+    
     public interface IUserService
     {
         AuthenticateResponse Authenticate(AuthenticateRequest model);
         RegistrationResponse Registration(RegistrationRequest model);
         IEnumerable<User> GetAll();
         User GetById(int id);
+        
     }
 
     public class UserService : IUserService
     {
-        List<User> db = new List<User>();
-        
+
+        static Database db = new Database();
 
         // users hardcoded for simplicity, store in a db with hashed passwords in production applications
 
@@ -34,8 +36,8 @@ namespace Auth.Service
 
         public AuthenticateResponse Authenticate(AuthenticateRequest model)
         {
-            db.Add(new User("test", "test", "test", "test", "test"));
-            var user = db.SingleOrDefault(x => x.Username == model.Username && x.Password == model.Password);
+            db.Users.Add(new User("test", "test", "test", "test", "test"));
+            var user = db.Users.SingleOrDefault(x => x.Username == model.Username && x.Password == model.Password);
 
             // return null if user not found
             if (user == null) return null;
@@ -48,16 +50,17 @@ namespace Auth.Service
 
         public RegistrationResponse Registration(RegistrationRequest model)
         {
-            /*foreach(var u in dataBase.UsersList)
+            db.Users.Add(new User("test", "test", "test", "test", "test"));
+            foreach (var u in db.Users)
             {
                 if (u.Username.Equals(model.Username))
                 {
-                 
+                    return null;
                     
                 }
-            } */
+            } 
             User user = new User(model.FirstName, model.LastName, model.Username, model.Email, model.Password);
-            db.Add(user);
+            db.Users.Add(user);
 
             // authentication successful so generate jwt token
             var token = generateJwtToken(user);
@@ -67,12 +70,12 @@ namespace Auth.Service
 
         public IEnumerable<User> GetAll()
         {
-            return db;
+            return db.Users;
         }
 
         public User GetById(int id)
         {
-            return db.FirstOrDefault(x => x.Id == id);
+            return db.Users.FirstOrDefault(x => x.Id == id);
         }
 
         // helper methods

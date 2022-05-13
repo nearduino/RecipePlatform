@@ -37,7 +37,6 @@ namespace Auth.API.Controllers
             return Ok(response);
         }
 
-        [Authorize]
         [HttpGet]
         public IActionResult GetAll()
         {
