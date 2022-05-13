@@ -26,16 +26,32 @@ namespace RecipeHub.Domain.Model
         public uint PreparationTime { get; set; }
         public string ImgSrc { get; private set; }
 
+        public int UserId { get; private set; }
+
         public Recipe(Category category, string name, string desc, string instructions, uint preparationTime,
-            List<RecipeIngredient> recipeIngredients, List<Comment> comments)
+            List<RecipeIngredient> recipeIngredients, List<Comment> comments, int userId)
         {
             Category = category;
             Name = name;
             Description = desc;
             Instructions = instructions;
             PreparationTime = preparationTime;
-            _recipeIngredients = new List<RecipeIngredient>();
+            _recipeIngredients = recipeIngredients;
             _comments = comments;
+            Validate();
+        }
+
+        public Recipe(Category category, string name, string desc, string instructions, uint preparationTime,
+            List<RecipeIngredient> recipeIngredients, int userId)
+        {
+            Category = category;
+            Name = name;
+            Description = desc;
+            Instructions = instructions;
+            PreparationTime = preparationTime;
+            _recipeIngredients = recipeIngredients;
+            _comments = new List<Comment>();
+            UserId = userId;
             Validate();
         }
 
@@ -44,6 +60,7 @@ namespace RecipeHub.Domain.Model
             if (!TextValidator.CheckName(Name)) throw new InvalidNameException();
             if (Description.Length == 0) throw new ArgumentException("Description must not be empty");
             if (Instructions.Length == 0) throw new ArgumentException("Instructions must not be empty");
+            if (UserId <= 0) throw new ArgumentException("Invalid user Id");
         }
 
         public string GetImage()

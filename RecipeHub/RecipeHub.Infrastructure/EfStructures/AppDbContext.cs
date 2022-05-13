@@ -37,7 +37,7 @@ namespace RecipeHub.Infrastructure.EfStructures
                 PreparationTime = 30,
                 RecipeIngredientsDbo = new List<RecipeIngredientDbo>()
             };
-            rec.RecipeIngredientsDbo.Add(new RecipeIngredientDbo{Ingredient = ingr, Quantity = 2});
+            rec.RecipeIngredientsDbo.Add(new RecipeIngredientDbo{IngredientDbo = ingr, Quantity = 2});
             Recipes.Add(rec);
             SaveChanges();
         }

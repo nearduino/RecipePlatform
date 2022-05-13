@@ -1,4 +1,5 @@
-﻿using RecipeHub.Domain.Model.Enums;
+﻿using System.Collections.Generic;
+using RecipeHub.Domain.Model.Enums;
 
 namespace RecipeHub.API.DTO
 {
@@ -10,5 +11,6 @@ namespace RecipeHub.API.DTO
         public string Instructions { get; set; }
         public Category Category { get; set; }
         public uint PreparationTime { get; set; }
+        public IEnumerable<RecipeIngredientDto> Ingredients { get; set; }
     }
 }

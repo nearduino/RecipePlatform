@@ -22,7 +22,7 @@ namespace RecipeHub.Infrastructure.Repositories
             if (fetchType == FetchType.Eager) return recipes.
                 Include(r => r.CommentsDbo).
                 Include(r => r.RecipeIngredientsDbo).
-                ThenInclude(r => r.Ingredient).
+                ThenInclude(r => r.IngredientDbo).
                 First(r => r.Id == id);
             return recipes.First(r => r.Id == id);
         }
