@@ -14,6 +14,7 @@ namespace RecipeHub.Infrastructure.EfStructures
     {
         public DbSet<RecipeDbo> Recipes { get; set; }
         public DbSet<CommentDbo> Comments { get; set; }
+        public DbSet<RecipeIngredientDbo> RecipeIngredientDbos { get; set; }
         public DbSet<IngredientDbo> Ingredients { get; set; }
 
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
@@ -24,17 +25,25 @@ namespace RecipeHub.Infrastructure.EfStructures
                 MeasureUnit = MeasureUnit.g,
                 Name = "Lala"
             };
+            IngredientDbo ingr2 = new IngredientDbo
+            {
+                CaloriesPerUnit = 20,
+                MeasureUnit = MeasureUnit.ml,
+                Name = "Bla"
+            };
             Ingredients.Add(ingr);
+            Ingredients.Add(ingr2);
             SaveChanges();
             RecipeDbo rec = new RecipeDbo
             {
-                Name = "S visnjom burek",
+                Name = "Sa visnjom burek",
                 Category = Category.Breakfast,
                 CommentsDbo = new List<CommentDbo> { new CommentDbo { Rating = 10, Text = "Sjajno" } },
                 Description = "Ovo je burek punjen visnjama",
                 ImgSrc = "",
-                Instructions = "",
+                Instructions = "Stavis visnje u burek",
                 PreparationTime = 30,
+                UserId = 1,
                 RecipeIngredientsDbo = new List<RecipeIngredientDbo>()
             };
             rec.RecipeIngredientsDbo.Add(new RecipeIngredientDbo{IngredientDbo = ingr, Quantity = 2});

@@ -28,6 +28,14 @@ namespace RecipeHub.Domain.Model
             Validate();
         }
 
+        public Ingredient(int calories, string name, MeasureUnit measureUnit)
+        {
+            CaloriesPerUnit = calories;
+            Name = name;
+            MeasureUnit = measureUnit;
+            Validate();
+        }
+
         private void Validate()
         {
             if (CaloriesPerUnit <= 0) throw new InvalidCaloriesException();

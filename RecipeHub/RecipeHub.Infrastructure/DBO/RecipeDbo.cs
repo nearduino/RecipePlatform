@@ -19,5 +19,6 @@ namespace RecipeHub.Infrastructure.DBO
         public List<RecipeIngredientDbo> RecipeIngredientsDbo { get; set; }
         public uint PreparationTime { get; set; }
         public string ImgSrc { get; set; }
+        public int UserId { get; internal set; }
     }
 }

@@ -10,8 +10,12 @@ using System.Threading.Tasks;
 using Autofac;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
+using RecipeHub.Domain.InfrasctructureInterfaces;
+using RecipeHub.Domain.Services;
+using RecipeHub.Domain.Services.Implementation;
 using RecipeHub.Infrastructure.EfStructures;
 using RecipeHub.Infrastructure.Repositories;
+using RecipeHub.Infrastructure.Services;
 
 namespace RecipeHub.API
 {
@@ -40,6 +44,9 @@ namespace RecipeHub.API
             services.AddScoped<IRecipeRepository, RecipeRepository>();
             services.AddScoped<IIngredientRepository, IngredientRepository>();
             services.AddScoped<ICommentRepository, CommentRepository>();
+            services.AddScoped<IRecipeInfrastructureService, RecipeInfrastructureService>();
+            services.AddScoped<IIngredientInfrastructureService, IngredientInfrastructureService>();
+            services.AddScoped<IRecipeService, RecipeService>();
 
 
         }

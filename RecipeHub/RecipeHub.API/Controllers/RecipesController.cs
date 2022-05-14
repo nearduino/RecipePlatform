@@ -1,9 +1,14 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Metadata;
+using System.Reflection.Metadata.Ecma335;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using RecipeHub.API.DTO;
 using RecipeHub.Domain.Model;
+using RecipeHub.Domain.Model.Exceptions;
+using RecipeHub.Domain.Services;
 using RecipeHub.Infrastructure.DBO;
 using RecipeHub.Infrastructure.Repositories;
 using RecipeHub.Infrastructure.Repositories.Enums;
@@ -14,65 +19,88 @@ namespace RecipeHub.API.Controllers
     [ApiController]
     public class RecipesController : ControllerBase
     {
-        private readonly IRecipeRepository _receiptRepo;
-        private readonly IIngredientRepository _ingredientRepository;
+        private readonly IRecipeService _recipeService;
 
-        public RecipesController(IRecipeRepository receiptRepo, IIngredientRepository ingredientRepository)
+        public RecipesController(IRecipeService recipeService)
         {
-            _receiptRepo = receiptRepo;
-            _ingredientRepository = ingredientRepository;
+            _recipeService = recipeService;
         }
+
         [HttpGet]
         public IActionResult GetAll()
         {
-            return Ok(_receiptRepo.GetAll().ToList());
+            try
+            {
+                return Ok(_recipeService.GetAll());
+            }
+            catch (Exception ex)
+            {
+                return Problem(ex.Message);
+            }
         }
 
         [HttpGet("{id:int}")]
         public IActionResult GetById(int id)
         {
-            return Ok(_receiptRepo.GetById(id, FetchType.Eager));
+            try
+            {
+                return Ok(_recipeService.GetById(id));
+            }
+            catch (EntityNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return Problem(ex.Message);
+            }
         }
 
         [HttpPut]
         public IActionResult PostRecipe(NewRecipeDto dto)
         {
-            var ingredientIds = new List<int>();
-            foreach(var ingredientDtos in dto.Ingredients)ingredientIds.Add(ingredientDtos.IngredientId);
-            var ingredients = _ingredientRepository.GetByIds(ingredientIds);
-            List<RecipeIngredient> recipeIngredients = new List<RecipeIngredient>();
-            foreach (var ingredient in ingredients.Zip(dto.Ingredients))
+            List<Tuple<int, int>>ingredientIds = new List<Tuple<int, int>>();
+            foreach (var ingr in dto.Ingredients)
             {
-                recipeIngredients.Add(new RecipeIngredient(ingredient.Second.Quantity, new Ingredient(ingredient.First.CaloriesPerUnit, ingredient.First.Name, ingredient.First.MeasureUnit, ingredient.First.Id)));
+                ingredientIds.Add(new Tuple<int, int>(ingr.IngredientId, ingr.Quantity));
             }
-            Recipe recipe = new Recipe(dto.Category, dto.Name, dto.Description, dto.Instructions, dto.PreparationTime,
-                recipeIngredients, dto.UserId);
-            var recipeDbo = new RecipeDbo
+
+            try
             {
-                Category = recipe.Category,
-                CommentsDbo = new List<CommentDbo>(),
-                Description = recipe.Description,
-                Name = recipe.Name,
-                Instructions = recipe.Instructions,
-                PreparationTime = recipe.PreparationTime,
-                RecipeIngredientsDbo = new List<RecipeIngredientDbo>()
-            };
-            foreach (var ingredient in recipe.RecipeIngredients)
-            {
-                recipeDbo.RecipeIngredientsDbo.Add(new RecipeIngredientDbo
-                {
-                    IngredientDboId = ingredient.Ingredient.Id,
-                    /*IngredientDbo = new IngredientDbo
-                    {
-                        CaloriesPerUnit = ingredient.Ingredient.CaloriesPerUnit,
-                        Id = ingredient.Ingredient.Id,
-                        MeasureUnit = ingredient.Ingredient.MeasureUnit,
-                        Name = ingredient.Ingredient.Name
-                    },*/
-                    Quantity = ingredient.Quantity
-                });
+                _recipeService.CreateNewRecipe(
+                    dto.Category,
+                    dto.Name,
+                    dto.Description,
+                    dto.Instructions,
+                    dto.PreparationTime,
+                    ingredientIds,
+                    dto.UserId);
+                return Ok("Successfully created new recipe");
             }
-            return Ok(_receiptRepo.Add(recipeDbo));
+            catch (InvalidNameException)
+            {
+                return BadRequest("Enter valid recipe name!");
+            }
+            catch (InvalidDescriptionException)
+            {
+                return BadRequest("Enter recipe description!");
+            }
+            catch (InvalidRecipeInstructionsException)
+            {
+                return BadRequest("Enter recipe instructions!");
+            }
+            catch (EmptyRecipeIngredientsException)
+            {
+                return BadRequest("Specify at least one recipe ingredient");
+            }
+            catch (InvalidUserIdException)
+            {
+                return Unauthorized("Invalid user id");
+            }
+            catch (EntityNotFoundException)
+            {
+                return NotFound("Ingredient not found!");
+            }
         }
     }
 }
