@@ -50,9 +50,13 @@ namespace RecipeHub.API.Controllers
             {
                 return NotFound(ex.Message);
             }
-            catch (Exception ex)
+            catch (InvalidOperationException)
             {
-                return Problem(ex.Message);
+                return NotFound("Recipe not found");
+            }
+            catch (Exception e)
+            {
+                return Problem(e.Message);
             }
         }
 
@@ -97,9 +101,9 @@ namespace RecipeHub.API.Controllers
             {
                 return Unauthorized("Invalid user id");
             }
-            catch (EntityNotFoundException)
+            catch (EntityNotFoundException exception)
             {
-                return NotFound("Ingredient not found!");
+                return NotFound(exception.Message);
             }
         }
     }

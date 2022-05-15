@@ -10,6 +10,7 @@ using RecipeHub.Domain.Model;
 using RecipeHub.Infrastructure.DBO;
 using RecipeHub.Infrastructure.Repositories;
 using RecipeHub.Infrastructure.Mappers;
+using RecipeHub.Infrastructure.Repositories.Enums;
 
 namespace RecipeHub.Infrastructure.Services
 {
@@ -45,11 +46,8 @@ namespace RecipeHub.Infrastructure.Services
 
         public Recipe GetById(int id)
         {
-            return Mapper.Map(_recipeRepository.GetAll().
-                Include(r => r.CommentsDbo).
-                Include(r => r.RecipeIngredientsDbo).
-                ThenInclude(r => r.IngredientDbo).
-                First(r => r.Id == id));
+            return Mapper.Map(_recipeRepository.GetById(id, FetchType.Eager));
         }
+
     }
 }
