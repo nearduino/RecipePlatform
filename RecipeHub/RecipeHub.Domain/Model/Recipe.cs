@@ -13,6 +13,7 @@ namespace RecipeHub.Domain.Model
 {
     public class Recipe
     {
+        public int Id { get; set; }
         public Category Category { get; private set; }
         public string Name { get; private set; }
         public string Description { get; private set; }        

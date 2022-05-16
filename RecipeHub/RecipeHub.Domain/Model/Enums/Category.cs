@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace RecipeHub.Domain.Model.Enums
 {
-        public enum Category
-        {
-            Breakfast,
-            Lunch,
-            Dinner
-        }
+    public enum Category
+    {
+        Breakfast,
+        Lunch,
+        Dinner
+    }
 }
