@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Auth.Model;
 using Auth.Service;
+using System;
 
 namespace Auth.API.Controllers
 {
@@ -18,44 +19,30 @@ namespace Auth.API.Controllers
         [HttpPost("authenticate")]
         public IActionResult Authenticate(AuthenticateRequest model)
         {
-            var response = _userService.Authenticate(model);
+            try
+            {
+                var response = _userService.Authenticate(model);
+                return Ok(new { StatusCode = 200, Token = response });
+            }
+            catch(Exception e)
+            {
+                return BadRequest(new { StatusCode = 403, Message = e.Message });
 
-            if (response == null)
-                return BadRequest(new { message = "Username or password is incorrect" });
-
-            return Ok(response);
+            }      
         }
 
         [HttpPost("register")]
         public IActionResult Register(RegistrationRequest model)
         {
-            var response = _userService.Registration(model);
-            if (response == "-1")
-            {               
-                ModelState.AddModelError("username", "Username already in use");
-                return BadRequest(new { StatusCode = 400, ModelState });
-
-            }                
-            if (response == "-2")
+            try
             {
-                ModelState.AddModelError("email", "Email already in use");
-                return BadRequest(new { StatusCode = 400, ModelState });
-
-            }
-            if (response == "-3")
-            {
-                ModelState.AddModelError("email", "Invalid email format");
-                return BadRequest(new {StatusCode = 400, ModelState });
-
-            }                      
+                var response = _userService.Register(model);
                 return Ok(new { StatusCode = 200, Token = response });
-                     
-                
-               
-            
-               
-
-
+            }
+            catch (Exception e)
+            {
+                return BadRequest(new { StatusCode = 400, Message =  e.Message});
+            }
             
         }
 

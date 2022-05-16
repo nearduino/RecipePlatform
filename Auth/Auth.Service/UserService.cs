@@ -8,14 +8,16 @@ using System.Security.Claims;
 using System.Text;
 using Auth.Model;
 using System.Net.Mail;
+using System.Text.RegularExpressions;
+using Auth.Model.Exceptions;
 
 namespace Auth.Service
 {
     
     public interface IUserService
     {
-        AuthenticateResponse Authenticate(AuthenticateRequest model);
-        string Registration(RegistrationRequest model);
+        string Authenticate(AuthenticateRequest model);
+        string Register(RegistrationRequest model);
         IEnumerable<User> GetAll();
         User GetById(int id);
         
@@ -35,36 +37,36 @@ namespace Auth.Service
             _appSettings = appSettings.Value;
         }
 
-        public AuthenticateResponse Authenticate(AuthenticateRequest model)
+        public string Authenticate(AuthenticateRequest model)
         {
             var user = db.Users.SingleOrDefault(x => x.Username == model.Username && x.Password == model.Password);
 
             // return null if user not found
-            if (user == null) return null;
+            if (user == null) throw new LogInException();
 
             // authentication successful so generate jwt token
             var token = generateJwtToken(user);
 
-            return new AuthenticateResponse(user, token);
+            return token;
         }
 
-        public string Registration(RegistrationRequest model)
+        public string Register(RegistrationRequest model)
         {
-            string retValue;
+           
             foreach (var u in db.Users)
             {
                 if (u.Username.Equals(model.Username))
-                {                    
-                    return "-1";                    
+                {
+                    throw new UsernameIsTakenException();
                 }
                 else if (u.Email.Equals(model.Email))
-                {                    
-                    return "-2";
+                {
+                    throw new EmailIsTakenException();
                 }
             }
             if (!IsValid(model.Email))
-            {              
-                return "-3";
+            {
+                throw new InvalidEmailFormatException();
             }
             User user = new User(model.FirstName, model.LastName, model.Username, model.Email, model.Password);
             db.Users.Add(user);
@@ -82,12 +84,16 @@ namespace Auth.Service
 
             if (trimmedEmail.EndsWith("."))
             {
-                return false; // suggested by @TK-421
+                return false; 
             }
             try
             {
-                var addr = new System.Net.Mail.MailAddress(email);
-                return addr.Address == trimmedEmail;
+                Regex regex = new Regex(@"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$");
+                Match match = regex.Match(email);
+                if (match.Success)
+                    return true;
+                else
+                    return false;
             }
             catch
             {
