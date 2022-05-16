@@ -18,11 +18,11 @@ namespace RecipeHub.Infrastructure.Repositories
         {
         }
 
-        public CommentDbo getById(int id, LoadType loadType = LoadType.Lazy)
+        public CommentDbo getById(int id, FetchType fetchType = FetchType.Lazy)
         {
-            var set = GetAll();
-            if (loadType == LoadType.Eager) { } //return set.Include(c => c.Comments).First(c => c.Id == id);
-            return set.First(c => c.Id == id);
+            var comments = GetAll();
+            if (fetchType == FetchType.Eager) { } //return set.Include(c => c.Comments).First(c => c.Id == id);
+            return comments.First(c => c.Id == id);
         }
     }
 }

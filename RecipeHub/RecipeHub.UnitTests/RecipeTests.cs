@@ -17,8 +17,9 @@ namespace RecipeHub.UnitTests
         [MemberData(nameof(GetRecipeRatingData))]
         public void Recipe_rating(List<Comment> comments, double shouldBe, bool shouldThrowExcpetion)
         {
+            var ingr = new Ingredient(2, "Testo", MeasureUnit.g, 1);
             Recipe recipe = new Recipe(Category.Breakfast, "Test rec", "desc", "instr", 20,
-                new List<RecipeIngredient>(), comments);
+                new List<RecipeIngredient>{new RecipeIngredient(2, ingr)}, comments, 1, 1);
             bool exceptionThrown = false;
             try
             {

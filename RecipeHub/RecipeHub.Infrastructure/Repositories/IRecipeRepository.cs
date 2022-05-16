@@ -11,6 +11,6 @@ namespace RecipeHub.Infrastructure.Repositories
 {
     public interface IRecipeRepository : IBaseRepository<int, RecipeDbo>
     {
-        public RecipeDbo GetById(int id, LoadType loadType = LoadType.Lazy);
+        public RecipeDbo GetById(int id, FetchType fetchType = FetchType.Lazy);
     }
 }

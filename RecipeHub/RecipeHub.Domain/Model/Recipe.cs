@@ -13,6 +13,7 @@ namespace RecipeHub.Domain.Model
 {
     public class Recipe
     {
+        public int Id { get; private set; }
         public Category Category { get; private set; }
         public string Name { get; private set; }
         public string Description { get; private set; }        
@@ -26,24 +27,58 @@ namespace RecipeHub.Domain.Model
         public uint PreparationTime { get; set; }
         public string ImgSrc { get; private set; }
 
+        public int UserId { get; private set; }
+
         public Recipe(Category category, string name, string desc, string instructions, uint preparationTime,
-            List<RecipeIngredient> recipeIngredients, List<Comment> comments)
+            List<RecipeIngredient> recipeIngredients, List<Comment> comments, int userId, int id)
+        {
+            Id = id;
+            UserId = userId;
+            Category = category;
+            Name = name;
+            Description = desc;
+            Instructions = instructions;
+            PreparationTime = preparationTime;
+            _recipeIngredients = recipeIngredients;
+            _comments = comments;
+            Validate();
+        }
+
+        public Recipe(Category category, string name, string desc, string instructions, uint preparationTime,
+            List<RecipeIngredient> recipeIngredients, List<Comment> comments, int userId)
+        {
+            UserId = userId;
+            Category = category;
+            Name = name;
+            Description = desc;
+            Instructions = instructions;
+            PreparationTime = preparationTime;
+            _recipeIngredients = recipeIngredients;
+            _comments = comments;
+            Validate();
+        }
+
+        public Recipe(Category category, string name, string desc, string instructions, uint preparationTime,
+            List<RecipeIngredient> recipeIngredients, int userId)
         {
             Category = category;
             Name = name;
             Description = desc;
             Instructions = instructions;
             PreparationTime = preparationTime;
-            _recipeIngredients = new List<RecipeIngredient>();
-            _comments = comments;
+            _recipeIngredients = recipeIngredients;
+            _comments = new List<Comment>();
+            UserId = userId;
             Validate();
         }
 
         private void Validate()
         {
             if (!TextValidator.CheckName(Name)) throw new InvalidNameException();
-            if (Description.Length == 0) throw new ArgumentException("Description must not be empty");
-            if (Instructions.Length == 0) throw new ArgumentException("Instructions must not be empty");
+            if (Description.Length == 0) throw new InvalidDescriptionException();
+            if (Instructions.Length == 0) throw new InvalidRecipeInstructionsException();
+            if (_recipeIngredients.Count == 0) throw new EmptyRecipeIngredientsException();
+            if (UserId <= 0) throw new InvalidUserIdException();
         }
 
         public string GetImage()

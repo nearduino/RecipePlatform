@@ -11,6 +11,6 @@ namespace RecipeHub.API.Controllers
     [ApiController]
     public class RegistrationController : ControllerBase
     {
-        [HttpPost("api/[controller]")]
+        //[HttpPost("api/[controller]")]
     }
 }

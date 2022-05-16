@@ -12,13 +12,23 @@ namespace RecipeHub.Domain.Model
 {
     public class Ingredient
     {
+        public int Id { get; private set; }
         public int CaloriesPerUnit { get; private set; }
         public string Name { get; private set; }
         public MeasureUnit MeasureUnit { get; private set; }
 
         private Ingredient(){}
 
-        public Ingredient(int calories, string name, int quantity, MeasureUnit measureUnit)
+        public Ingredient(int calories, string name, MeasureUnit measureUnit, int id)
+        {
+            Id = id;
+            CaloriesPerUnit = calories;
+            Name = name;
+            MeasureUnit = measureUnit;
+            Validate();
+        }
+
+        public Ingredient(int calories, string name, MeasureUnit measureUnit)
         {
             CaloriesPerUnit = calories;
             Name = name;

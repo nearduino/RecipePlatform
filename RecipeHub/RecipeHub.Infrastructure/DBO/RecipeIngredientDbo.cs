@@ -8,7 +8,8 @@ namespace RecipeHub.Infrastructure.DBO
 {
     public class RecipeIngredientDbo
     {
-        public IngredientDbo Ingredient { get; set; }
+        public int IngredientDboId { get; set; }
+        public IngredientDbo IngredientDbo { get; set; }
         public int Quantity { get; set; }
     }
 }

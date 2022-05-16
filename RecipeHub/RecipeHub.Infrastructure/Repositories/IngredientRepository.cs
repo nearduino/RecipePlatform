@@ -15,9 +15,15 @@ namespace RecipeHub.Infrastructure.Repositories
         public IngredientRepository(AppDbContext context) : base(context)
         {
         }
-        public IngredientDbo getById(int id)
+        public IngredientDbo GetById(int id)
         {
             return GetAll().First(i => i.Id == id);
+        }
+
+        public IEnumerable<IngredientDbo> GetByIds(IEnumerable<int> ids)
+        {
+            var Ingredients = GetAll();
+            return Ingredients.Where(i => ids.Contains(i.Id));
         }
     }
 }
