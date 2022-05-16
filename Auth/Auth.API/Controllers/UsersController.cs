@@ -30,18 +30,32 @@ namespace Auth.API.Controllers
         public IActionResult Register(RegistrationRequest model)
         {
             var response = _userService.Registration(model);
+            if (response == "-1")
+            {               
+                ModelState.AddModelError("username", "Username already in use");
+                return BadRequest(new { StatusCode = 400, ModelState });
 
-            if (response == null)
-                return BadRequest(new { message = "Username or password is incorrect" });
+            }                
+            if (response == "-2")
+            {
+                ModelState.AddModelError("email", "Email already in use");
+                return BadRequest(new { StatusCode = 400, ModelState });
 
-            if (!response.Status)
-            {
-                return BadRequest(new { message = response.Message });
             }
-            else
+            if (response == "-3")
             {
-                return Ok(response);
-            }
+                ModelState.AddModelError("email", "Invalid email format");
+                return BadRequest(new {StatusCode = 400, ModelState });
+
+            }                      
+                return Ok(new { StatusCode = 200, Token = response });
+                     
+                
+               
+            
+               
+
+
             
         }
 

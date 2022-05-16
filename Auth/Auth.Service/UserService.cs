@@ -15,7 +15,7 @@ namespace Auth.Service
     public interface IUserService
     {
         AuthenticateResponse Authenticate(AuthenticateRequest model);
-        RegistrationResponse Registration(RegistrationRequest model);
+        string Registration(RegistrationRequest model);
         IEnumerable<User> GetAll();
         User GetById(int id);
         
@@ -48,28 +48,23 @@ namespace Auth.Service
             return new AuthenticateResponse(user, token);
         }
 
-        public RegistrationResponse Registration(RegistrationRequest model)
-        {          
-            RegistrationResponse registrationResponse;    
+        public string Registration(RegistrationRequest model)
+        {
+            string retValue;
             foreach (var u in db.Users)
             {
                 if (u.Username.Equals(model.Username))
-                {
-
-                    registrationResponse = new RegistrationResponse("Username is already taken!");
-                    return registrationResponse;
-                    
+                {                    
+                    return "-1";                    
                 }
                 else if (u.Email.Equals(model.Email))
-                {
-                    registrationResponse = new RegistrationResponse("Email is already taken!");
-                    return registrationResponse;
+                {                    
+                    return "-2";
                 }
             }
             if (!IsValid(model.Email))
-            {
-                registrationResponse = new RegistrationResponse("Invalid email format!");
-                return registrationResponse;
+            {              
+                return "-3";
             }
             User user = new User(model.FirstName, model.LastName, model.Username, model.Email, model.Password);
             db.Users.Add(user);
@@ -77,7 +72,7 @@ namespace Auth.Service
             // authentication successful so generate jwt token
             var token = generateJwtToken(user);
 
-            return new RegistrationResponse(user, token);
+            return token;
         }
 
         bool IsValid(string email)
