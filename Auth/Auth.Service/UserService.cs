@@ -28,7 +28,6 @@ namespace Auth.Service
 
         // users hardcoded for simplicity, store in a db with hashed passwords in production applications
 
-
         private readonly AppSettings _appSettings;
 
         public UserService(IOptions<AppSettings> appSettings)
@@ -38,7 +37,6 @@ namespace Auth.Service
 
         public AuthenticateResponse Authenticate(AuthenticateRequest model)
         {
-            db.Users.Add(new User("test", "test", "test", "test", "test"));
             var user = db.Users.SingleOrDefault(x => x.Username == model.Username && x.Password == model.Password);
 
             // return null if user not found
@@ -51,28 +49,27 @@ namespace Auth.Service
         }
 
         public RegistrationResponse Registration(RegistrationRequest model)
-        {
-            db.Users.Add(new User("test", "test", "test", "test", "test"));
-            RegistrationResponse rr;
+        {          
+            RegistrationResponse registrationResponse;    
             foreach (var u in db.Users)
             {
                 if (u.Username.Equals(model.Username))
                 {
 
-                    rr = new RegistrationResponse("Username is already taken!");
-                    return rr;
+                    registrationResponse = new RegistrationResponse("Username is already taken!");
+                    return registrationResponse;
                     
                 }
                 else if (u.Email.Equals(model.Email))
                 {
-                    rr = new RegistrationResponse("Email is already taken!");
-                    return rr;
+                    registrationResponse = new RegistrationResponse("Email is already taken!");
+                    return registrationResponse;
                 }
             }
             if (!IsValid(model.Email))
             {
-                rr = new RegistrationResponse("Invalid email format!");
-                return rr;
+                registrationResponse = new RegistrationResponse("Invalid email format!");
+                return registrationResponse;
             }
             User user = new User(model.FirstName, model.LastName, model.Username, model.Email, model.Password);
             db.Users.Add(user);
