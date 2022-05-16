@@ -100,6 +100,31 @@ namespace RecipeHub.API.Controllers
             }
             return Ok("Successfully created new recipe");
         }
-        
+
+        [HttpPut]
+        public IActionResult UpdateRecipe(UpdateRecipeDto dto)
+        {
+            List<Tuple<int, int>> ingredientIds = new List<Tuple<int, int>>();
+            foreach (var ingr in dto.Ingredients)
+            {
+                ingredientIds.Add(new Tuple<int, int>(ingr.IngredientId, ingr.Quantity));
+            }
+            _recipeService.UpdateRecipe(dto.Id,
+                dto.Category,
+                dto.Name,
+                dto.Description,
+                dto.Instructions,
+                dto.PreparationTime,
+                ingredientIds,
+                dto.UserId);
+            return Ok("Recipe updated successfully");
+        }
+
+        [HttpDelete]
+        public IActionResult DeleteRecipe(DeleteRecipeDto dto)
+        {
+            _recipeService.DeleteRecipe(dto.RecipeId);
+            return Ok();
+        }
     }
 }

@@ -46,6 +46,32 @@ namespace RecipeHub.Domain.Services.Implementation
             return _recipeInfrastructureService.GetById(id);
         }
 
+        public void UpdateRecipe(int id, Category category, string name, string description, string instructions, uint preparationTime,
+            IEnumerable<Tuple<int, int>> recipeIngredientIds, int userId)
+        {
+            var ingrIds = recipeIngredientIds as Tuple<int, int>[] ?? recipeIngredientIds.ToArray();
+            var ingredients = ExtractIngredients(ingrIds);
+            List<RecipeIngredient> recipeIngredients = new List<RecipeIngredient>();
+            foreach (var recipeIngredient in ingredients.Zip(ingrIds))
+            {
+                recipeIngredients.Add(new RecipeIngredient(recipeIngredient.Second.Item2, recipeIngredient.First));
+            }
+
+            var recipe = _recipeInfrastructureService.GetById(id);
+            recipe.UpdateDescription(description);
+            recipe.UpdateIngredients(recipeIngredients);
+            recipe.UpdateInstructions(instructions);
+            recipe.UpdatePreparationTime(preparationTime);
+            recipe.UpdateName(name);
+            recipe.UpdateCategory(category);
+            _recipeInfrastructureService.UpdateRecipe(recipe);
+        }
+
+        public void DeleteRecipe(int id)
+        {
+            _recipeInfrastructureService.Delete(id);
+        }
+
         private IEnumerable<Ingredient> ExtractIngredients(Tuple<int, int>[] ingrIds)
         {
             List<int> ingredientIds = new List<int>();
