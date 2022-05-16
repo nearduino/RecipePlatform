@@ -60,8 +60,8 @@ namespace RecipeHub.API.Controllers
             }
         }
 
-        [HttpPut]
-        public IActionResult PostRecipe(NewRecipeDto dto)
+        [HttpPost]
+        public IActionResult PostRecipe(RecipeDto dto)
         {
             List<Tuple<int, int>>ingredientIds = new List<Tuple<int, int>>();
             foreach (var ingr in dto.Ingredients)
@@ -79,32 +79,27 @@ namespace RecipeHub.API.Controllers
                     dto.PreparationTime,
                     ingredientIds,
                     dto.UserId);
-                return Ok("Successfully created new recipe");
             }
-            catch (InvalidNameException)
+            catch (Exception ex)
             {
-                return BadRequest("Enter valid recipe name!");
+                switch (ex)
+                {
+                    case InvalidNameException:
+                        return BadRequest("Enter valid recipe name!");
+                    case InvalidDescriptionException:
+                        return BadRequest("Enter valid recipe name!");
+                    case InvalidRecipeInstructionsException:
+                        return BadRequest("Enter recipe instructions!");
+                    case EmptyRecipeIngredientsException:
+                        return BadRequest("Specify at least one recipe ingredient");
+                    case InvalidUserIdException:
+                        return Unauthorized("Invalid user id");
+                    case EntityNotFoundException:
+                        return NotFound(ex.Message);
+                }
             }
-            catch (InvalidDescriptionException)
-            {
-                return BadRequest("Enter recipe description!");
-            }
-            catch (InvalidRecipeInstructionsException)
-            {
-                return BadRequest("Enter recipe instructions!");
-            }
-            catch (EmptyRecipeIngredientsException)
-            {
-                return BadRequest("Specify at least one recipe ingredient");
-            }
-            catch (InvalidUserIdException)
-            {
-                return Unauthorized("Invalid user id");
-            }
-            catch (EntityNotFoundException exception)
-            {
-                return NotFound(exception.Message);
-            }
+            return Ok("Successfully created new recipe");
         }
+        
     }
 }

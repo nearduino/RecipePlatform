@@ -3,7 +3,7 @@ using RecipeHub.Domain.Model.Enums;
 
 namespace RecipeHub.API.DTO
 {
-    public class NewRecipeDto
+    public class RecipeDto
     {
         public int UserId { get; set; }
         public string Name { get; set; }
