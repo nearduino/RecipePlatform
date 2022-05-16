@@ -7,7 +7,6 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using Auth.Model;
-using System.Net.Mail;
 using System.Text.RegularExpressions;
 using Auth.Model.Exceptions;
 

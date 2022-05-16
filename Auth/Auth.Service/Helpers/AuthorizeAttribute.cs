@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Http;
-
 using Microsoft.AspNetCore.Mvc.Filters;
 using System;
 using Auth.Model;
