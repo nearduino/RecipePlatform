@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Auth.Model.InfrastructureInterfaces
 {
-    public interface IRecipeInfrastructureService
+    public interface IUserInfrastructureService
     {
         public IEnumerable<User> GetAll();
         public void SaveUser(User user);

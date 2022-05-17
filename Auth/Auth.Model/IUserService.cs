@@ -10,7 +10,12 @@ namespace Auth.Model
     {
         public IEnumerable<User> GetAll();
 
-        public void CreateNewUser(string firstName, string lastName, string userName, string email);
+        public void CreateNewUser(string firstName, string lastName, string userName, string email, string password, bool isAdmin);
         public User GetById(int id);
+
+        string Authenticate(AuthenticateRequest model);
+        string Register(RegistrationRequest model);
+     
+       
     }
 }

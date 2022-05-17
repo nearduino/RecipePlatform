@@ -9,36 +9,31 @@ using System.Text;
 using Auth.Model;
 using System.Text.RegularExpressions;
 using Auth.Model.Exceptions;
+using Auth.Model.InfrastructureInterfaces;
 
 namespace Auth.Service
-{
-    
-    public interface IUserService
-    {
-        string Authenticate(AuthenticateRequest model);
-        string Register(RegistrationRequest model);
-        IEnumerable<User> GetAll();
-        User GetById(int id);
-        
-    }
-
+{   
+  
     public class UserService : IUserService
     {
 
         static Database db = new Database();
 
+        private readonly IUserInfrastructureService _userInfrastructureService;
+
         // users hardcoded for simplicity, store in a db with hashed passwords in production applications
 
         private readonly AppSettings _appSettings;
 
-        public UserService(IOptions<AppSettings> appSettings)
+        public UserService(IOptions<AppSettings> appSettings, IUserInfrastructureService userInfrastructureService)
         {
             _appSettings = appSettings.Value;
+            _userInfrastructureService = userInfrastructureService;
         }
 
         public string Authenticate(AuthenticateRequest model)
         {
-            var user = db.Users.SingleOrDefault(x => x.Username == model.Username && x.Password == model.Password);
+            var user = db.Users.SingleOrDefault(x => x.UserName == model.Username && x.Password == model.Password);
 
             // return null if user not found
             if (user == null) throw new LogInException();
@@ -54,7 +49,7 @@ namespace Auth.Service
            
             foreach (var u in db.Users)
             {
-                if (u.Username.Equals(model.Username))
+                if (u.UserName.Equals(model.Username))
                 {
                     throw new UsernameIsTakenException();
                 }
@@ -67,10 +62,11 @@ namespace Auth.Service
             {
                 throw new InvalidEmailFormatException();
             }
-            User user = new User(model.FirstName, model.LastName, model.Username, model.Email, model.Password);
-            db.Users.Add(user);
+           
+            CreateNewUser(model.FirstName, model.LastName, model.Username, model.Email, model.Password, model.IsAdmin);
 
             // authentication successful so generate jwt token
+            User user = new User(model.FirstName, model.LastName, model.Username, model.Email, model.Password, model.IsAdmin);
             var token = generateJwtToken(user);
 
             return token;
@@ -100,14 +96,20 @@ namespace Auth.Service
             }
         }
 
-            public IEnumerable<User> GetAll()
+        public void CreateNewUser(string firstName, string lastName, string userName, string email, string password, bool isAdmin)         
+        {            
+            User user = new User(firstName, lastName, userName, email, password, isAdmin);
+            _userInfrastructureService.SaveUser(user);
+        }
+
+        public IEnumerable<User> GetAll()
         {
-            return db.Users;
+            return _userInfrastructureService.GetAll().ToList();
         }
 
         public User GetById(int id)
         {
-            return db.Users.FirstOrDefault(x => x.Id == id);
+            return _userInfrastructureService.GetById(id);
         }
 
         // helper methods
