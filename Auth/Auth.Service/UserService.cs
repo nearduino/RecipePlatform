@@ -32,7 +32,8 @@ namespace Auth.Service
 
         public string Authenticate(AuthenticateRequest model)
         {
-            var user = db.Users.SingleOrDefault(x => x.UserName == model.Username && x.Password == model.Password);
+            IEnumerable<User> allUsers = _userInfrastructureService.GetAll();
+            var user = allUsers.SingleOrDefault(x => x.UserName == model.Username && x.Password == model.Password);
 
             // return null if user not found
             if (user == null) throw new LogInException();
