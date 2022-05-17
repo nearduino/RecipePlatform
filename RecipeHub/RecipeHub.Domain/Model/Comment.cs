@@ -9,7 +9,6 @@ namespace RecipeHub.Domain.Model
 {
     public class Comment
     {
-        public int Id { get; set; }
         public uint Rating { get; set; }
         public string Text { get; set; }
 
