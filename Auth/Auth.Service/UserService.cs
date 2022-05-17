@@ -45,8 +45,8 @@ namespace Auth.Service
 
         public string Register(RegistrationRequest model)
         {
-           
-            foreach (var u in db.Users)
+            IEnumerable<User> allUsers = _userInfrastructureService.GetAll();
+            foreach (var u in allUsers)
             {
                 if (u.UserName.Equals(model.Username))
                 {
