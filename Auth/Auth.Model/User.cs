@@ -1,4 +1,5 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 
 namespace Auth.Model
@@ -9,6 +10,8 @@ namespace Auth.Model
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string Username { get; set; }
+
+        [EmailAddress(ErrorMessage = "Not a valid email")]
         public string Email { get; set; }
         public bool IsAdmin { get; set; }
 
