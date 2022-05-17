@@ -5,6 +5,7 @@ using System.Reflection.Metadata;
 using System.Reflection.Metadata.Ecma335;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using RecipeHub.API.Attributes;
 using RecipeHub.API.DTO;
 using RecipeHub.Domain.Model;
 using RecipeHub.Domain.Model.Exceptions;
@@ -26,9 +27,11 @@ namespace RecipeHub.API.Controllers
             _recipeService = recipeService;
         }
 
+        [SkipJwtMiddleware]
         [HttpGet]
         public IActionResult GetAll()
         {
+            var id = HttpContext.Items["id"];
             try
             {
                 return Ok(_recipeService.GetAll());
