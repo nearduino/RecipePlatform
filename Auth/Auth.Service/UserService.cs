@@ -7,23 +7,27 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using Auth.Model;
+using System.Text.RegularExpressions;
+using Auth.Model.Exceptions;
+
 namespace Auth.Service
 {
+    
     public interface IUserService
     {
-        AuthenticateResponse Authenticate(AuthenticateRequest model);
-        RegistrationResponse Registration(RegistrationRequest model);
+        string Authenticate(AuthenticateRequest model);
+        string Register(RegistrationRequest model);
         IEnumerable<User> GetAll();
         User GetById(int id);
+        
     }
 
     public class UserService : IUserService
     {
-        List<User> db = new List<User>();
-        
+
+        static Database db = new Database();
 
         // users hardcoded for simplicity, store in a db with hashed passwords in production applications
-
 
         private readonly AppSettings _appSettings;
 
@@ -32,47 +36,78 @@ namespace Auth.Service
             _appSettings = appSettings.Value;
         }
 
-        public AuthenticateResponse Authenticate(AuthenticateRequest model)
+        public string Authenticate(AuthenticateRequest model)
         {
-            db.Add(new User("test", "test", "test", "test", "test"));
-            var user = db.SingleOrDefault(x => x.Username == model.Username && x.Password == model.Password);
+            var user = db.Users.SingleOrDefault(x => x.Username == model.Username && x.Password == model.Password);
 
             // return null if user not found
-            if (user == null) return null;
+            if (user == null) throw new LogInException();
 
             // authentication successful so generate jwt token
             var token = generateJwtToken(user);
 
-            return new AuthenticateResponse(user, token);
+            return token;
         }
 
-        public RegistrationResponse Registration(RegistrationRequest model)
+        public string Register(RegistrationRequest model)
         {
-            /*foreach(var u in dataBase.UsersList)
+           
+            foreach (var u in db.Users)
             {
                 if (u.Username.Equals(model.Username))
                 {
-                 
-                    
+                    throw new UsernameIsTakenException();
                 }
-            } */
+                else if (u.Email.Equals(model.Email))
+                {
+                    throw new EmailIsTakenException();
+                }
+            }
+            if (!IsValid(model.Email))
+            {
+                throw new InvalidEmailFormatException();
+            }
             User user = new User(model.FirstName, model.LastName, model.Username, model.Email, model.Password);
-            db.Add(user);
+            db.Users.Add(user);
 
             // authentication successful so generate jwt token
             var token = generateJwtToken(user);
 
-            return new RegistrationResponse(user, token);
+            return token;
         }
 
-        public IEnumerable<User> GetAll()
+        bool IsValid(string email)
         {
-            return db;
+            
+            var trimmedEmail = email.Trim();
+
+            if (trimmedEmail.EndsWith("."))
+            {
+                return false; 
+            }
+            try
+            {
+                Regex regex = new Regex(@"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$");
+                Match match = regex.Match(email);
+                if (match.Success)
+                    return true;
+                else
+                    return false;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+            public IEnumerable<User> GetAll()
+        {
+            return db.Users;
         }
 
         public User GetById(int id)
         {
-            return db.FirstOrDefault(x => x.Id == id);
+            return db.Users.FirstOrDefault(x => x.Id == id);
         }
 
         // helper methods

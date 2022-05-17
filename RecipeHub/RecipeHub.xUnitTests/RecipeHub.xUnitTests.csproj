@@ -21,7 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\RecipeHub.Domain\RecipeHub.Domain.csproj" />
+    <ProjectReference Include="..\RecipeHub.API\RecipeHub.API.csproj" />
   </ItemGroup>
 
 </Project>

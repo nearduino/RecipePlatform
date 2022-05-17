@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Auth.Model;
 using Auth.Service;
+using System;
 
 namespace Auth.API.Controllers
 {
@@ -18,26 +19,33 @@ namespace Auth.API.Controllers
         [HttpPost("authenticate")]
         public IActionResult Authenticate(AuthenticateRequest model)
         {
-            var response = _userService.Authenticate(model);
+            try
+            {
+                var response = _userService.Authenticate(model);
+                return Ok(new { StatusCode = 200, Token = response });
+            }
+            catch(Exception e)
+            {
+                return BadRequest(new { StatusCode = 403, Message = e.Message });
 
-            if (response == null)
-                return BadRequest(new { message = "Username or password is incorrect" });
-
-            return Ok(response);
+            }      
         }
 
         [HttpPost("register")]
         public IActionResult Register(RegistrationRequest model)
         {
-            var response = _userService.Registration(model);
-
-            if (response == null)
-                return BadRequest(new { message = "Username or password is incorrect" });
-
-            return Ok(response);
+            try
+            {
+                var response = _userService.Register(model);
+                return Ok(new { StatusCode = 200, Token = response });
+            }
+            catch (Exception e)
+            {
+                return BadRequest(new { StatusCode = 400, Message =  e.Message});
+            }
+            
         }
 
-        [Authorize]
         [HttpGet]
         public IActionResult GetAll()
         {
