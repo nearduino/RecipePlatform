@@ -20,10 +20,10 @@ namespace RecipeHub.Domain.Model
         public string Instructions { get; private set; }
 
         private readonly List<Comment> _comments;
-        public List<Comment> Comments => new List<Comment>(_comments);
+        public List<Comment> Comments => new (_comments);
 
-        private readonly List<RecipeIngredient> _recipeIngredients;
-        public List<RecipeIngredient> RecipeIngredients => new List<RecipeIngredient>(_recipeIngredients);
+        private List<RecipeIngredient> _recipeIngredients;
+        public List<RecipeIngredient> RecipeIngredients => new (_recipeIngredients);
         public uint PreparationTime { get; set; }
         public string ImgSrc { get; private set; }
 
@@ -41,6 +41,21 @@ namespace RecipeHub.Domain.Model
             PreparationTime = preparationTime;
             _recipeIngredients = recipeIngredients;
             _comments = comments;
+            Validate();
+        }
+
+        public Recipe(Category category, string name, string desc, string instructions, uint preparationTime,
+            List<RecipeIngredient> recipeIngredients, int userId, int id)
+        {
+            Id = id;
+            UserId = userId;
+            Category = category;
+            Name = name;
+            Description = desc;
+            Instructions = instructions;
+            PreparationTime = preparationTime;
+            _recipeIngredients = recipeIngredients;
+            _comments = new List<Comment>();
             Validate();
         }
 
@@ -103,6 +118,42 @@ namespace RecipeHub.Domain.Model
             double rating = 0;
             foreach (var comment in _comments) rating += comment.Rating;
             return rating / _comments.Count;
+        }
+
+        public void UpdateDescription(string desc)
+        {
+            Description = desc;
+            Validate();
+        }
+
+        public void UpdateInstructions(string instr)
+        {
+            Instructions = instr;
+            Validate();
+        }
+
+        public void UpdateIngredients(List<RecipeIngredient> ingredients)
+        {
+            _recipeIngredients = ingredients;
+            Validate();
+        }
+
+        public void UpdatePreparationTime(uint prepTime)
+        {
+            PreparationTime = prepTime;
+            Validate();
+        }
+
+        public void UpdateName(string name)
+        {
+            Name = name;
+            Validate();
+        }
+
+        public void UpdateCategory(Category category)
+        {
+            Category = category;
+            Validate();
         }
     }
 }

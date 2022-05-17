@@ -12,5 +12,7 @@ namespace RecipeHub.Domain.InfrasctructureInterfaces
         public IEnumerable<Recipe> GetAll();
         public void SaveRecipe(Recipe recipe);
         public Recipe GetById(int id);
+        void UpdateRecipe(Recipe recipe);
+        void Delete(int id);
     }
 }

@@ -49,5 +49,16 @@ namespace RecipeHub.Infrastructure.Services
             return Mapper.Map(_recipeRepository.GetById(id, FetchType.Eager));
         }
 
+        public void UpdateRecipe(Recipe recipe)
+        {
+            var dbo = _recipeRepository.GetById(recipe.Id, FetchType.Eager);
+            dbo.Overwrite(Mapper.Map(recipe));
+            _recipeRepository.Update(dbo);
+        }
+
+        public void Delete(int id)
+        {
+            _recipeRepository.Delete(_recipeRepository.GetById(id));
+        }
     }
 }
