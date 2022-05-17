@@ -12,8 +12,7 @@ using Auth.Model.Exceptions;
 using Auth.Model.InfrastructureInterfaces;
 
 namespace Auth.Service
-{   
-  
+{
     public class UserService : IUserService
     {
 
@@ -61,12 +60,13 @@ namespace Auth.Service
             if (!IsValid(model.Email))
             {
                 throw new InvalidEmailFormatException();
-            }
-           
-            CreateNewUser(model.FirstName, model.LastName, model.Username, model.Email, model.Password, model.IsAdmin);
+            }           
+
+            
+            User user = new User(model.FirstName, model.LastName, model.Username, model.Email, model.Password, model.IsAdmin);
+            _userInfrastructureService.SaveUser(user);
 
             // authentication successful so generate jwt token
-            User user = new User(model.FirstName, model.LastName, model.Username, model.Email, model.Password, model.IsAdmin);
             var token = generateJwtToken(user);
 
             return token;
@@ -95,12 +95,7 @@ namespace Auth.Service
                 return false;
             }
         }
-
-        public void CreateNewUser(string firstName, string lastName, string userName, string email, string password, bool isAdmin)         
-        {            
-            User user = new User(firstName, lastName, userName, email, password, isAdmin);
-            _userInfrastructureService.SaveUser(user);
-        }
+               
 
         public IEnumerable<User> GetAll()
         {

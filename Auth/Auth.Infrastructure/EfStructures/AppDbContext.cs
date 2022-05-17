@@ -27,12 +27,7 @@ namespace Auth.Infrastructure.EfStructures
             };            
             Users.Add(user);
             SaveChanges();
-        }
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            modelBuilder.Entity<UserDbo>();
-            base.OnModelCreating(modelBuilder);
-        }
+        }       
 
     }
    
