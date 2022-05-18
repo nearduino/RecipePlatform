@@ -9,36 +9,31 @@ using System.Text;
 using Auth.Model;
 using System.Text.RegularExpressions;
 using Auth.Model.Exceptions;
+using Auth.Model.InfrastructureInterfaces;
 
 namespace Auth.Service
 {
-    
-    public interface IUserService
-    {
-        string Authenticate(AuthenticateRequest model);
-        string Register(RegistrationRequest model);
-        IEnumerable<User> GetAll();
-        User GetById(int id);
-        
-    }
-
     public class UserService : IUserService
     {
 
         static Database db = new Database();
 
+        private readonly IUserInfrastructureService _userInfrastructureService;
+
         // users hardcoded for simplicity, store in a db with hashed passwords in production applications
 
         private readonly AppSettings _appSettings;
 
-        public UserService(IOptions<AppSettings> appSettings)
+        public UserService(IOptions<AppSettings> appSettings, IUserInfrastructureService userInfrastructureService)
         {
             _appSettings = appSettings.Value;
+            _userInfrastructureService = userInfrastructureService;
         }
 
         public string Authenticate(AuthenticateRequest model)
         {
-            var user = db.Users.SingleOrDefault(x => x.Username == model.Username && x.Password == model.Password);
+            IEnumerable<User> allUsers = _userInfrastructureService.GetAll();
+            var user = allUsers.SingleOrDefault(x => x.UserName == model.Username && x.Password == model.Password);
 
             // return null if user not found
             if (user == null) throw new LogInException();
@@ -51,10 +46,10 @@ namespace Auth.Service
 
         public string Register(RegistrationRequest model)
         {
-           
-            foreach (var u in db.Users)
+            IEnumerable<User> allUsers = _userInfrastructureService.GetAll();
+            foreach (var u in allUsers)
             {
-                if (u.Username.Equals(model.Username))
+                if (u.UserName.Equals(model.Username))
                 {
                     throw new UsernameIsTakenException();
                 }
@@ -66,9 +61,11 @@ namespace Auth.Service
             if (!IsValid(model.Email))
             {
                 throw new InvalidEmailFormatException();
-            }
-            User user = new User(model.FirstName, model.LastName, model.Username, model.Email, model.Password);
-            db.Users.Add(user);
+            }           
+
+            
+            User user = new User(model.FirstName, model.LastName, model.Username, model.Email, model.Password, model.IsAdmin);
+            _userInfrastructureService.SaveUser(user);
 
             // authentication successful so generate jwt token
             var token = generateJwtToken(user);
@@ -99,15 +96,16 @@ namespace Auth.Service
                 return false;
             }
         }
+               
 
-            public IEnumerable<User> GetAll()
+        public IEnumerable<User> GetAll()
         {
-            return db.Users;
+            return _userInfrastructureService.GetAll().ToList();
         }
 
         public User GetById(int id)
         {
-            return db.Users.FirstOrDefault(x => x.Id == id);
+            return _userInfrastructureService.GetById(id);
         }
 
         // helper methods
@@ -119,7 +117,7 @@ namespace Auth.Service
             var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
             var tokenDescriptor = new SecurityTokenDescriptor
             {
-                Subject = new ClaimsIdentity(new[] { new Claim("id", user.Id.ToString()) }),
+                Subject = new ClaimsIdentity(new[] { new Claim("id", user.Id.ToString()), new Claim("isAdmin", user.IsAdmin.ToString()) }),
                 Expires = DateTime.UtcNow.AddDays(7),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
