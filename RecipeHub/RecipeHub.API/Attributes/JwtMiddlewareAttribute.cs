@@ -3,7 +3,7 @@ using System.Web.Http.Filters;
 
 namespace RecipeHub.API.Attributes
 {
-    public class SkipJwtMiddlewareAttribute : ActionFilterAttribute
+    public abstract class JwtMiddlewareAttribute : ActionFilterAttribute
     {
 
     }

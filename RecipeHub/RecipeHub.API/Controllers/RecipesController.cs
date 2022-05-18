@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Reflection.Metadata;
 using System.Reflection.Metadata.Ecma335;
 using Microsoft.AspNetCore.Http;
@@ -27,7 +28,6 @@ namespace RecipeHub.API.Controllers
             _recipeService = recipeService;
         }
 
-        [SkipJwtMiddleware]
         [HttpGet]
         public IActionResult GetAll()
         {
@@ -63,9 +63,11 @@ namespace RecipeHub.API.Controllers
             }
         }
 
+        [JwtUserAuthorization]
         [HttpPost]
         public IActionResult PostRecipe(RecipeDto dto)
         {
+            var userId = int.Parse((string)HttpContext.Items["id"] ?? string.Empty);
             List<Tuple<int, int>>ingredientIds = new List<Tuple<int, int>>();
             foreach (var ingr in dto.Ingredients)
             {
@@ -81,7 +83,7 @@ namespace RecipeHub.API.Controllers
                     dto.Instructions,
                     dto.PreparationTime,
                     ingredientIds,
-                    dto.UserId);
+                    userId);
             }
             catch (Exception ex)
             {
@@ -103,10 +105,14 @@ namespace RecipeHub.API.Controllers
             }
             return Ok("Successfully created new recipe");
         }
-
+        [JwtUserAuthorization]
         [HttpPut]
         public IActionResult UpdateRecipe(UpdateRecipeDto dto)
         {
+            if (int.Parse((string)HttpContext.Items["id"] ?? string.Empty) != dto.UserId)
+            {
+                return Unauthorized("Cannot edit recipes of another user");
+            }
             List<Tuple<int, int>> ingredientIds = new List<Tuple<int, int>>();
             foreach (var ingr in dto.Ingredients)
             {
@@ -123,6 +129,7 @@ namespace RecipeHub.API.Controllers
             return Ok("Recipe updated successfully");
         }
 
+        [JwtAdminOrSameUserIdAuthorization]
         [HttpDelete]
         public IActionResult DeleteRecipe(DeleteRecipeDto dto)
         {
