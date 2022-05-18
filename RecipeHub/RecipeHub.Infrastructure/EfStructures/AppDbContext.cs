@@ -43,7 +43,7 @@ namespace RecipeHub.Infrastructure.EfStructures
                 ImgSrc = "",
                 Instructions = "Stavis visnje u burek",
                 PreparationTime = 30,
-                UserId = 1,
+                UserId = Guid.NewGuid(),
                 RecipeIngredientsDbo = new List<RecipeIngredientDbo>()
             };
             rec.RecipeIngredientsDbo.Add(new RecipeIngredientDbo{IngredientDbo = ingr, Quantity = 2});

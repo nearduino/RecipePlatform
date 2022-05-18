@@ -16,7 +16,7 @@ namespace RecipeHub.Infrastructure.Repositories
         public RecipeRepository(AppDbContext context) : base(context)
         {
         }
-        public RecipeDbo GetById(int id, FetchType fetchType = FetchType.Lazy)
+        public RecipeDbo GetById(Guid id, FetchType fetchType = FetchType.Lazy)
         {
             var recipes = GetAll();
             if (fetchType == FetchType.Eager) return recipes.

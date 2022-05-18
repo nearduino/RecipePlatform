@@ -11,8 +11,8 @@ namespace RecipeHub.Domain.InfrasctructureInterfaces
     {
         public IEnumerable<Recipe> GetAll();
         public void SaveRecipe(Recipe recipe);
-        public Recipe GetById(int id);
+        public Recipe GetById(Guid id);
         void UpdateRecipe(Recipe recipe);
-        void Delete(int id);
+        void Delete(Guid id);
     }
 }

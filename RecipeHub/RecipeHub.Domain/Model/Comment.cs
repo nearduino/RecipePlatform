@@ -9,9 +9,9 @@ namespace RecipeHub.Domain.Model
 {
     public class Comment
     {
-        public int Id { get; private set; }
-        public uint Rating { get; private set; }
-        public string Text { get; private set; }
+        public Guid Id { get; set; }
+        public uint Rating { get; set; }
+        public string Text { get; set; }
 
         public Comment(uint rating, string text)
         {
@@ -20,7 +20,7 @@ namespace RecipeHub.Domain.Model
             Validate();
         }
 
-        public Comment(int id, uint rating, string text)
+        public Comment(Guid id, uint rating, string text)
         {
             Rating = rating;
             Text = text;

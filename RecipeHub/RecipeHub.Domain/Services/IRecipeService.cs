@@ -14,11 +14,11 @@ namespace RecipeHub.Domain.Services
         public IEnumerable<Recipe> GetAll();
 
         public void CreateNewRecipe(Category category, string name, string description, string instructions,
-            uint preparationTime, IEnumerable<Tuple<int, int>> recipeIngredientIds, int userId);
-        public Recipe GetById(int id);
+            uint preparationTime, IEnumerable<Tuple<Guid, int>> recipeIngredientIds, Guid userId);
+        public Recipe GetById(Guid id);
 
-        public void UpdateRecipe(int id, Category category, string name, string description, string instructions,
-            uint preparationTime, IEnumerable<Tuple<int, int>> recipeIngredientIds, int userId);
-        public void DeleteRecipe(int id);
+        public void UpdateRecipe(Guid id, Category category, string name, string description, string instructions,
+            uint preparationTime, IEnumerable<Tuple<Guid, int>> recipeIngredientIds, Guid userId);
+        public void DeleteRecipe(Guid id);
     }
 }

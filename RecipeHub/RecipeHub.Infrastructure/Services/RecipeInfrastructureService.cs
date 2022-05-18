@@ -44,7 +44,7 @@ namespace RecipeHub.Infrastructure.Services
             _recipeRepository.Add(Mapper.Map(recipe));
         }
 
-        public Recipe GetById(int id)
+        public Recipe GetById(Guid id)
         {
             return Mapper.Map(_recipeRepository.GetById(id, FetchType.Eager));
         }
@@ -56,7 +56,7 @@ namespace RecipeHub.Infrastructure.Services
             _recipeRepository.Update(dbo);
         }
 
-        public void Delete(int id)
+        public void Delete(Guid id)
         {
             _recipeRepository.Delete(_recipeRepository.GetById(id));
         }

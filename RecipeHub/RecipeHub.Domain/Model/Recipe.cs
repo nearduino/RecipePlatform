@@ -13,7 +13,7 @@ namespace RecipeHub.Domain.Model
 {
     public class Recipe
     {
-        public int Id { get; private set; }
+        public Guid Id { get; private set; }
         public Category Category { get; private set; }
         public string Name { get; private set; }
         public string Description { get; private set; }        
@@ -27,10 +27,10 @@ namespace RecipeHub.Domain.Model
         public uint PreparationTime { get; set; }
         public string ImgSrc { get; private set; }
 
-        public int UserId { get; private set; }
+        public Guid UserId { get; private set; }
 
         public Recipe(Category category, string name, string desc, string instructions, uint preparationTime,
-            List<RecipeIngredient> recipeIngredients, List<Comment> comments, int userId, int id)
+            List<RecipeIngredient> recipeIngredients, List<Comment> comments, Guid userId, Guid id)
         {
             Id = id;
             UserId = userId;
@@ -45,7 +45,7 @@ namespace RecipeHub.Domain.Model
         }
 
         public Recipe(Category category, string name, string desc, string instructions, uint preparationTime,
-            List<RecipeIngredient> recipeIngredients, int userId, int id)
+            List<RecipeIngredient> recipeIngredients, Guid userId, Guid id)
         {
             Id = id;
             UserId = userId;
@@ -60,7 +60,7 @@ namespace RecipeHub.Domain.Model
         }
 
         public Recipe(Category category, string name, string desc, string instructions, uint preparationTime,
-            List<RecipeIngredient> recipeIngredients, List<Comment> comments, int userId)
+            List<RecipeIngredient> recipeIngredients, List<Comment> comments, Guid userId)
         {
             UserId = userId;
             Category = category;
@@ -74,7 +74,7 @@ namespace RecipeHub.Domain.Model
         }
 
         public Recipe(Category category, string name, string desc, string instructions, uint preparationTime,
-            List<RecipeIngredient> recipeIngredients, int userId)
+            List<RecipeIngredient> recipeIngredients, Guid userId)
         {
             Category = category;
             Name = name;
@@ -93,7 +93,7 @@ namespace RecipeHub.Domain.Model
             if (Description.Length == 0) throw new InvalidDescriptionException();
             if (Instructions.Length == 0) throw new InvalidRecipeInstructionsException();
             if (_recipeIngredients.Count == 0) throw new EmptyRecipeIngredientsException();
-            if (UserId <= 0) throw new InvalidUserIdException();
+            //if (UserId <= 0) throw new InvalidUserIdException();
         }
 
         public string GetImage()

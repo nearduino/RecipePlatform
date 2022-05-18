@@ -40,7 +40,7 @@ namespace RecipeHub.API.Controllers
         }
 
         [HttpGet("{id:int}")]
-        public IActionResult GetById(int id)
+        public IActionResult GetById(Guid id)
         {
             try
             {
@@ -63,10 +63,10 @@ namespace RecipeHub.API.Controllers
         [HttpPost]
         public IActionResult PostRecipe(RecipeDto dto)
         {
-            List<Tuple<int, int>>ingredientIds = new List<Tuple<int, int>>();
+            List<Tuple<Guid, int>>ingredientIds = new List<Tuple<Guid, int>>();
             foreach (var ingr in dto.Ingredients)
             {
-                ingredientIds.Add(new Tuple<int, int>(ingr.IngredientId, ingr.Quantity));
+                ingredientIds.Add(new Tuple<Guid, int>(ingr.IngredientId, ingr.Quantity));
             }
 
             try
@@ -104,10 +104,10 @@ namespace RecipeHub.API.Controllers
         [HttpPut]
         public IActionResult UpdateRecipe(UpdateRecipeDto dto)
         {
-            List<Tuple<int, int>> ingredientIds = new List<Tuple<int, int>>();
+            List<Tuple<Guid, int>> ingredientIds = new List<Tuple<Guid, int>>();
             foreach (var ingr in dto.Ingredients)
             {
-                ingredientIds.Add(new Tuple<int, int>(ingr.IngredientId, ingr.Quantity));
+                ingredientIds.Add(new Tuple<Guid, int>(ingr.IngredientId, ingr.Quantity));
             }
             _recipeService.UpdateRecipe(dto.Id,
                 dto.Category,

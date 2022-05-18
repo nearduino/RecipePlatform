@@ -1,8 +1,10 @@
-﻿namespace RecipeHub.API.DTO
+﻿using System;
+
+namespace RecipeHub.API.DTO
 {
     public class DeleteRecipeDto
     {
-        public int UserId { get; set; }
-        public int RecipeId { get; set; }
+        public Guid UserId { get; set; }
+        public Guid RecipeId { get; set; }
     }
 }

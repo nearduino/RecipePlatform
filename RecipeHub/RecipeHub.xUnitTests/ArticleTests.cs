@@ -10,17 +10,17 @@ using Xunit;
 
 namespace RecipeHub.UnitTests
 {
-    public class ArticleLogicTests
+    public class ArticleTests
     {
         [Theory]
         [MemberData(nameof(CreateArticle_objects))]
-        public void CreateArticle_should_throw_exception(int id, Article a)
+        public void CreateArticle_should_throw_exception(Article a)
         {
-            ArticleLogic al = new ArticleLogic();
+            ArticleService al = new ArticleService();
             bool exceptionThrown = false;
             try
             {
-                al.CreateArticle(id, a);
+                al.CreateArticle(a);
             }
             catch (ArticleException)
             {
@@ -31,32 +31,33 @@ namespace RecipeHub.UnitTests
 
         public static IEnumerable<object[]> CreateArticle_objects()
         {
-            List<object[]> retVal = new List<object[]>();           
-            Article a1 = new Article(1, "Title 1", "text 1");
+            List<object[]> retVal = new List<object[]>();
+            Guid id1 = Guid.Parse("1");
+            Article a1 = new Article(id1, "Title 1", "text 1");
             retVal.Add(new object[]
             {
-                a1.Id, a1
+                a1
             }) ;
 
-            Article a2 = new Article(2, "Title 2", "text 2");
+            Article a2 = new Article(Guid.NewGuid(), "Title 2", "text 2");
             retVal.Add(new object[]
             {
-                a2.Id, a2
+                a2
             });
-
-            Article a3 = new Article(1, "Title 3", "text 3");
+            Guid id3 = id1;
+            Article a3 = new Article(id3, "Title 3", "text 3");
             retVal.Add(new object[]
             {
-                a3.Id, a3
+                a3
             });
             return retVal;
         }
 
         [Theory]
         [MemberData(nameof(ReadArticle_objects))]
-        public void ReadArticle_should_throw_exception(int id)
+        public void ReadArticle_should_throw_exception(Guid id)
         {
-            ArticleLogic al = new ArticleLogic();
+            ArticleService al = new ArticleService();
             bool exceptionThrown = false;
             try
             {
@@ -89,13 +90,13 @@ namespace RecipeHub.UnitTests
 
         [Theory]
         [MemberData(nameof(UpdateArticle_objects))]
-        public void UpdateArticle_should_throw_exception(int id, Article a)
+        public void UpdateArticle_should_throw_exception(Article a)
         {
-            ArticleLogic al = new ArticleLogic();
+            ArticleService al = new ArticleService();
             bool exceptionThrown = false;
             try
             {
-                al.UpdateArticle(id, a);
+                al.UpdateArticle(a);
             }
             catch (ArticleException)
             {
@@ -107,31 +108,32 @@ namespace RecipeHub.UnitTests
         public static IEnumerable<object[]> UpdateArticle_objects()
         {
             List<object[]> retVal = new List<object[]>();
-            Article a1 = new Article(1, "Title 1e", "text 1e");
+            Guid id1 = Guid.NewGuid();
+            Article a1 = new Article(id1, "Title 1e", "text 1e");
             retVal.Add(new object[]
             {
-                a1.Id, a1
+                a1
             });
-
-            Article a2 = new Article(2, "Title 2e", "text 2e");
+            Guid id2 = Guid.NewGuid();
+            Article a2 = new Article(id2, "Title 2e", "text 2e");
             retVal.Add(new object[]
             {
-                a2.Id, a2
+                a2
             });
-
-            Article a3 = new Article(1, "Title 3e", "text 3e");
+            Guid id3 = id1;
+            Article a3 = new Article(id3, "Title 3e", "text 3e");
             retVal.Add(new object[]
             {
-                a3.Id, a3
+                a3
             });
             return retVal;
         }
 
         [Theory]
         [MemberData(nameof(DeleteArticle_objects))]
-        public void DeleteArticle_should_throw_exception(int id)
+        public void DeleteArticle_should_throw_exception(Guid id)
         {
-            ArticleLogic al = new ArticleLogic();
+            ArticleService al = new ArticleService();
             bool exceptionThrown = false;
             try
             {

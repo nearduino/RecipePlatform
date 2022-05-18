@@ -10,7 +10,7 @@ namespace RecipeHub.Infrastructure.DBO
 {
     public class RecipeDbo
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         public Category Category { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
@@ -19,7 +19,7 @@ namespace RecipeHub.Infrastructure.DBO
         public List<RecipeIngredientDbo> RecipeIngredientsDbo { get; set; }
         public uint PreparationTime { get; set; }
         public string ImgSrc { get; set; }
-        public int UserId { get; set; }
+        public Guid UserId { get; set; }
 
         //Objanjenje (na srpskom radi lakseg razumevanja): Entity framework ne dozvoljava tracking vise entiteta sa
         //istim kljucem (Id), Detachovanje nije uspelo tako da je ideja da se dobavi entitet iz baze i njegova polja 

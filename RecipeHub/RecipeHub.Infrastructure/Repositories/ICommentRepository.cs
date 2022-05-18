@@ -9,8 +9,8 @@ using RecipeHub.Infrastructure.Repositories.Enums;
 
 namespace RecipeHub.Infrastructure.Repositories
 {
-    public interface ICommentRepository : IBaseRepository<int, CommentDbo>
+    public interface ICommentRepository : IBaseRepository<Guid, CommentDbo>
     {
-        public CommentDbo getById(int id, FetchType fetchType = FetchType.Lazy);
+        public CommentDbo getById(Guid id, FetchType fetchType = FetchType.Lazy);
     }
 }

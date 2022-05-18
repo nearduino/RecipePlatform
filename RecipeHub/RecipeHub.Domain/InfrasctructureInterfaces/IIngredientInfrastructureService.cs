@@ -9,6 +9,6 @@ namespace RecipeHub.Domain.InfrasctructureInterfaces
 {
     public interface IIngredientInfrastructureService
     {
-        public IEnumerable<Ingredient> GetIngredientsByIds(IEnumerable<int> ids);
+        public IEnumerable<Ingredient> GetIngredientsByIds(IEnumerable<Guid> ids);
     }
 }

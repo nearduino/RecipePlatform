@@ -5,13 +5,11 @@ VisualStudioVersion = 17.1.32228.430
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RecipeHub.Domain", "RecipeHub.Domain\RecipeHub.Domain.csproj", "{DDA7DA84-4757-44F5-9150-8A7BAEFB7948}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsoleApp1", "ConsoleApp1\ConsoleApp1.csproj", "{471B665F-6D53-4550-8368-95F5EBD6AA20}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RecipeHub.API", "RecipeHub.API\RecipeHub.API.csproj", "{DB938060-3C49-4541-959D-975D9E983643}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RecipeHub.Infrastructure", "RecipeHub.Infrastructure\RecipeHub.Infrastructure.csproj", "{8D0CA41D-F000-4260-A1BC-7989F3447638}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RecipeHub.xUnitTests", "RecipeHub.xUnitTests\RecipeHub.xUnitTests.csproj", "{EE4B792A-B557-4C01-82B7-C0C54EEEF625}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RecipeHub.xUnitTests", "RecipeHub.xUnitTests\RecipeHub.xUnitTests.csproj", "{EE4B792A-B557-4C01-82B7-C0C54EEEF625}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,10 +21,6 @@ Global
 		{DDA7DA84-4757-44F5-9150-8A7BAEFB7948}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DDA7DA84-4757-44F5-9150-8A7BAEFB7948}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DDA7DA84-4757-44F5-9150-8A7BAEFB7948}.Release|Any CPU.Build.0 = Release|Any CPU
-		{471B665F-6D53-4550-8368-95F5EBD6AA20}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{471B665F-6D53-4550-8368-95F5EBD6AA20}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{471B665F-6D53-4550-8368-95F5EBD6AA20}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{471B665F-6D53-4550-8368-95F5EBD6AA20}.Release|Any CPU.Build.0 = Release|Any CPU
 		{DB938060-3C49-4541-959D-975D9E983643}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{DB938060-3C49-4541-959D-975D9E983643}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DB938060-3C49-4541-959D-975D9E983643}.Release|Any CPU.ActiveCfg = Release|Any CPU
