@@ -5,8 +5,9 @@ using System;
 
 namespace Auth.API.Controllers
 {
+
+    [Route("api/[controller]")]
     [ApiController]
-    [Route("[controller]")]
     public class UsersController : ControllerBase
     {
         private IUserService _userService;
@@ -49,8 +50,14 @@ namespace Auth.API.Controllers
         [HttpGet]
         public IActionResult GetAll()
         {
-            var users = _userService.GetAll();
-            return Ok(users);
+            try
+            {
+                return Ok(_userService.GetAll());
+            }
+            catch (Exception ex)
+            {
+                return Problem(ex.Message);
+            }
         }
     }
 }
