@@ -38,18 +38,11 @@ namespace RecipeHub.API.Middleware
             {
                 var handler = new JwtSecurityTokenHandler();
                 if (atr.GetType() == typeof(JwtAdminAuthotizationAttribute))
-                {
                     if (await HandleAdminAuthorization(context, handler, token)) return;
-                }
                 if (atr.GetType() == typeof(JwtUserAuthorizationAttribute))
-                {
                     HandleUserAuthorization(context, handler, token);
-                }
-
                 if (atr.GetType() == typeof(JwtAdminOrSameUserIdAuthorization))
-                {
                     if (await HandleAdminOrSameUserIdAuthorization(context, handler, token)) return;
-                }
             }
             catch (Exception)
             {
