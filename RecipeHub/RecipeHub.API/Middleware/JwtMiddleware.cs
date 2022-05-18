@@ -66,15 +66,7 @@ namespace RecipeHub.API.Middleware
                     }
                     using (var reader = new JsonTextReader(new StringReader(body)))
                     {
-                        while (reader.Read())
-                        {
-                            if (reader.TokenType == JsonToken.PropertyName && (string)reader.Value == "userId")
-                            {
-                                reader.Read();
-                                break;
-                            }
-
-                        }
+                        GetUserIdFromBody(reader);
                         if (reader.Value == null)
                         {
                             context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
@@ -86,7 +78,7 @@ namespace RecipeHub.API.Middleware
                     }
                     var jwtSecurityToken = handler.ReadJwtToken(token);
                     var id = int.Parse(jwtSecurityToken.Claims.First(claim => claim.Type == "id").Value);
-                    context.Items.Add("id", jwtSecurityToken.Claims.First(claim => claim.Type == "id").Value);
+                    context.Items.Add("id", id);
                     var isAdmin = jwtSecurityToken.Claims.First(claim => claim.Type == "isAdmin").Value;
                     if (isAdmin.Equals("False") && userId != id)
                     {
@@ -103,6 +95,18 @@ namespace RecipeHub.API.Middleware
                 return;
             }
             await _next(context);
+        }
+
+        private static void GetUserIdFromBody(JsonTextReader reader)
+        {
+            while (reader.Read())
+            {
+                if (reader.TokenType == JsonToken.PropertyName && (string)reader.Value == "userId")
+                {
+                    reader.Read();
+                    break;
+                }
+            }
         }
     }
     public static class JwtMiddlewareExtensions
