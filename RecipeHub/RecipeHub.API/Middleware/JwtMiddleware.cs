@@ -39,53 +39,16 @@ namespace RecipeHub.API.Middleware
                 var handler = new JwtSecurityTokenHandler();
                 if (atr.GetType() == typeof(JwtAdminAuthotizationAttribute))
                 {
-                    var jwtSecurityToken = handler.ReadJwtToken(token);
-                    context.Items.Add("id", jwtSecurityToken.Claims.First(claim => claim.Type == "id").Value);
-                    if (jwtSecurityToken.Claims.First(claim => claim.Type == "isAdmin").Value.Equals("False"))
-                    {
-                        context.Response.StatusCode = (int)HttpStatusCode.Forbidden;
-                        await context.Response.WriteAsync("Forbidden");
-                        return;
-                    }
-                    context.Items.Add("admin", jwtSecurityToken.Claims.First(claim => claim.Type == "isAdmin").Value);
+                    if (await HandleAdminAuthorization(context, handler, token)) return;
                 }
                 if (atr.GetType() == typeof(JwtUserAuthorizationAttribute))
                 {
-                    var jwtSecurityToken = handler.ReadJwtToken(token);
-                    context.Items.Add("id", jwtSecurityToken.Claims.First(claim => claim.Type == "id").Value);
+                    HandleUserAuthorization(context, handler, token);
                 }
 
                 if (atr.GetType() == typeof(JwtAdminOrSameUserIdAuthorization))
                 {
-                    string body;
-                    int userId;
-                    using (StreamReader stream = new StreamReader(context.Request.Body))
-                    {
-                        body = await stream.ReadToEndAsync();
-                        
-                    }
-                    using (var reader = new JsonTextReader(new StringReader(body)))
-                    {
-                        GetUserIdFromBody(reader);
-                        if (reader.Value == null)
-                        {
-                            context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                            await context.Response.WriteAsync("UserId not found in body");
-                            return;
-                        }
-
-                        userId = (int)reader.Value;
-                    }
-                    var jwtSecurityToken = handler.ReadJwtToken(token);
-                    var id = int.Parse(jwtSecurityToken.Claims.First(claim => claim.Type == "id").Value);
-                    context.Items.Add("id", id);
-                    var isAdmin = jwtSecurityToken.Claims.First(claim => claim.Type == "isAdmin").Value;
-                    if (isAdmin.Equals("False") && userId != id)
-                    {
-                        context.Response.StatusCode = (int)HttpStatusCode.Forbidden;
-                        await context.Response.WriteAsync("Forbidden");
-                        return;
-                    }
+                    if (await HandleAdminOrSameUserIdAuthorization(context, handler, token)) return;
                 }
             }
             catch (Exception)
@@ -95,6 +58,63 @@ namespace RecipeHub.API.Middleware
                 return;
             }
             await _next(context);
+        }
+
+        private static async Task<bool> HandleAdminAuthorization(HttpContext context, JwtSecurityTokenHandler handler, string token)
+        {
+            var jwtSecurityToken = handler.ReadJwtToken(token);
+            context.Items.Add("id", jwtSecurityToken.Claims.First(claim => claim.Type == "id").Value);
+            if (jwtSecurityToken.Claims.First(claim => claim.Type == "isAdmin").Value.Equals("False"))
+            {
+                context.Response.StatusCode = (int)HttpStatusCode.Forbidden;
+                await context.Response.WriteAsync("Forbidden");
+                return true;
+            }
+
+            context.Items.Add("admin", jwtSecurityToken.Claims.First(claim => claim.Type == "isAdmin").Value);
+            return false;
+        }
+
+        private static void HandleUserAuthorization(HttpContext context, JwtSecurityTokenHandler handler, string token)
+        {
+            var jwtSecurityToken = handler.ReadJwtToken(token);
+            context.Items.Add("id", jwtSecurityToken.Claims.First(claim => claim.Type == "id").Value);
+        }
+
+        private static async Task<bool> HandleAdminOrSameUserIdAuthorization(HttpContext context, JwtSecurityTokenHandler handler, string token)
+        {
+            string body;
+            int userId;
+            using (StreamReader stream = new StreamReader(context.Request.Body))
+            {
+                body = await stream.ReadToEndAsync();
+            }
+
+            using (var reader = new JsonTextReader(new StringReader(body)))
+            {
+                GetUserIdFromBody(reader);
+                if (reader.Value == null)
+                {
+                    context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                    await context.Response.WriteAsync("UserId not found in body");
+                    return true;
+                }
+
+                userId = (int)reader.Value;
+            }
+
+            var jwtSecurityToken = handler.ReadJwtToken(token);
+            var id = int.Parse(jwtSecurityToken.Claims.First(claim => claim.Type == "id").Value);
+            context.Items.Add("id", id);
+            var isAdmin = jwtSecurityToken.Claims.First(claim => claim.Type == "isAdmin").Value;
+            if (isAdmin.Equals("False") && userId != id)
+            {
+                context.Response.StatusCode = (int)HttpStatusCode.Forbidden;
+                await context.Response.WriteAsync("Forbidden");
+                return true;
+            }
+
+            return false;
         }
 
         private static void GetUserIdFromBody(JsonTextReader reader)
