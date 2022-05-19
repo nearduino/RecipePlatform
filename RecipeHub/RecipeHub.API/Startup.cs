@@ -10,6 +10,8 @@ using System.Threading.Tasks;
 using Autofac;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
+using RecipeHub.API.Middleware;
+using RecipeHub.API.Swagger;
 using RecipeHub.Domain.InfrasctructureInterfaces;
 using RecipeHub.Domain.Services;
 using RecipeHub.Domain.Services.Implementation;
@@ -34,6 +36,7 @@ namespace RecipeHub.API
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "IntegrationApi", Version = "v1" });
+                c.OperationFilter<SwaggerHeaderParameter>();
             });
 
             services.AddDbContextPool<AppDbContext>(options =>
@@ -66,6 +69,8 @@ namespace RecipeHub.API
             app.UseRouting();
 
             app.UseAuthorization();
+
+            app.UseJwtMiddleware();
 
             app.UseEndpoints(endpoints =>
             {
