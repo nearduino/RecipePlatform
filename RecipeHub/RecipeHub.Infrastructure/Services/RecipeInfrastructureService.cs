@@ -44,7 +44,9 @@ namespace RecipeHub.Infrastructure.Services
 
         public void SaveRecipe(Recipe recipe)
         {
-            _recipeRepository.Add(_mapper.Map<RecipeDbo>(recipe));
+            var dbo = _mapper.Map<RecipeDbo>(recipe);
+            foreach (var ingr in dbo.RecipeIngredientsDbo) ingr.IngredientDbo = null;
+                _recipeRepository.Add(dbo);
         }
 
         public Recipe GetById(int id)
@@ -56,9 +58,11 @@ namespace RecipeHub.Infrastructure.Services
 
         public void UpdateRecipe(Recipe recipe)
         {
-            var dbo = _recipeRepository.GetById(recipe.Id, FetchType.Eager);
-            dbo.Overwrite(_mapper.Map<RecipeDbo>(recipe));
-            _recipeRepository.Update(dbo);
+            var fromDatabase = _recipeRepository.GetById(recipe.Id, FetchType.Eager);
+            var dbo = _mapper.Map<RecipeDbo>(recipe);
+            _mapper.Map(dbo, fromDatabase);
+            foreach (var ingr in fromDatabase.RecipeIngredientsDbo) ingr.IngredientDbo = null;
+            _recipeRepository.Update(fromDatabase);
         }
 
         public void Delete(int id)

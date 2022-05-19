@@ -19,6 +19,7 @@ namespace RecipeHub.Infrastructure.AutoMapperProfiles
             CreateMap<Recipe, RecipeDbo>()
                 .ForMember(r => r.CommentsDbo, opt => opt.MapFrom(src => src.Comments))
                 .ForMember(r => r.RecipeIngredientsDbo, opt => opt.MapFrom(src => src.RecipeIngredients));
+            CreateMap<RecipeDbo, RecipeDbo>();
         }
     }
 }
