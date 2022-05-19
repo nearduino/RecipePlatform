@@ -64,19 +64,7 @@ namespace Auth.API.Controllers
                     return BadRequest(new { StatusCode = 400, Message = e.Message });
                 }
                 
-            }
-            //return Ok(response);
-            /*
-            try
-            {
-                var response = _userService.Register(model);
-                return Ok(new { StatusCode = 200, Token = response });
-            }
-            catch (Exception e)
-            {
-                return BadRequest(new { StatusCode = 400, Message =  e.Message});
-            } */
-
+            }         
         }
 
         [HttpGet]
