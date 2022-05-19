@@ -52,7 +52,12 @@ namespace Auth.API.Controllers
                 response.ValidationMessages = ValidationMessages;
                 return BadRequest(new { StatusCode = 400, Message = response.ValidationMessages });
             }
-            return Ok(response);
+            else
+            {
+                string token = _userService.Register(model);
+                return Ok(new { StatusCode = 200, Token = token });
+            }
+            //return Ok(response);
             /*
             try
             {
