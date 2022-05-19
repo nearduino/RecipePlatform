@@ -7,11 +7,8 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using Auth.Model;
-using System.Text.RegularExpressions;
 using Auth.Model.Exceptions;
 using Auth.Model.InfrastructureInterfaces;
-using Auth.Model.Validators;
-using FluentValidation.Results;
 
 namespace Auth.Service
 {

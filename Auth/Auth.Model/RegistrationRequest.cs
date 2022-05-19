@@ -1,7 +1,4 @@
-﻿using Auth.Model.Validators;
-using System.ComponentModel.DataAnnotations;
-
-
+﻿
 namespace Auth.Model
 {
     public class RegistrationRequest

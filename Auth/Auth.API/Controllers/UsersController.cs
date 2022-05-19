@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Auth.Model;
-using Auth.Service;
 using System;
 using Auth.Model.Validators;
 using System.Collections.Generic;
