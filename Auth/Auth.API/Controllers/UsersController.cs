@@ -54,8 +54,16 @@ namespace Auth.API.Controllers
             }
             else
             {
-                string token = _userService.Register(model);
-                return Ok(new { StatusCode = 200, Token = token });
+                try
+                {
+                    string token = _userService.Register(model);
+                    return Ok(new { StatusCode = 200, Token = token });
+                }
+                catch (Exception e)
+                {
+                    return BadRequest(new { StatusCode = 400, Message = e.Message });
+                }
+                
             }
             //return Ok(response);
             /*

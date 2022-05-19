@@ -19,8 +19,6 @@ namespace Auth.Service
     {
 
         private string secretKey = "auhfeisoruvbe0t3ertbhe45tbe5ter5gu39485793084679084256932854902375niudgh";
-        private UserValidator validator;
-
 
         private readonly IUserInfrastructureService _userInfrastructureService;
 
@@ -32,7 +30,6 @@ namespace Auth.Service
         {
             _appSettings = appSettings.Value;
             _userInfrastructureService = userInfrastructureService;
-            validator = new UserValidator();
         }
 
         public string Authenticate(AuthenticateRequest model)
@@ -52,11 +49,11 @@ namespace Auth.Service
         public string Register(RegistrationRequest model)
         {
             IEnumerable<User> allUsers = _userInfrastructureService.GetAll();
-
-            /*
+            
+            // checking if username or email is already taken in database, return exception 
             foreach (var u in allUsers)
             {
-                if (u.UserName.Equals(model.Username))
+                if (u.UserName.Equals(model.UserName))
                 {
                     throw new UsernameIsTakenException();
                 }
@@ -64,48 +61,16 @@ namespace Auth.Service
                 {
                     throw new EmailIsTakenException();
                 }
-            }
-            if (!IsValid(model.Email))
-            {
-                throw new InvalidEmailFormatException();
-            }     */      
-
-            
+            }              
+          
             User user = new User(model.FirstName, model.LastName, model.UserName, model.Email, model.Password, model.IsAdmin);
-            _userInfrastructureService.SaveUser(user);
-            //ValidationResult results = validator.Validate(user);
-           
+            _userInfrastructureService.SaveUser(user);           
 
             // authentication successful so generate jwt token
             var token = generateJwtToken(user);
 
             return token;
-        }
-
-        bool IsValid(string email)
-        {
-            
-            var trimmedEmail = email.Trim();
-
-            if (trimmedEmail.EndsWith("."))
-            {
-                return false; 
-            }
-            try
-            {
-                Regex regex = new Regex(@"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$");
-                Match match = regex.Match(email);
-                if (match.Success)
-                    return true;
-                else
-                    return false;
-            }
-            catch
-            {
-                return false;
-            }
-        }
-               
+        }              
 
         public IEnumerable<User> GetAll()
         {
