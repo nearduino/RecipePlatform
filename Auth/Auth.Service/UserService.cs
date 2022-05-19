@@ -16,7 +16,7 @@ namespace Auth.Service
     public class UserService : IUserService
     {
 
-        static Database db = new Database();
+        private string secretKey = "auhfeisoruvbe0t3ertbhe45tbe5ter5gu39485793084679084256932854902375niudgh";
 
         private readonly IUserInfrastructureService _userInfrastructureService;
 
@@ -114,7 +114,7 @@ namespace Auth.Service
         {
             // generate token that is valid for 7 days
             var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
+            var key = Encoding.ASCII.GetBytes(secretKey);
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(new[] { new Claim("id", user.Id.ToString()), new Claim("isAdmin", user.IsAdmin.ToString()) }),
