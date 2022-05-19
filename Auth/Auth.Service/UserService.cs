@@ -10,6 +10,8 @@ using Auth.Model;
 using System.Text.RegularExpressions;
 using Auth.Model.Exceptions;
 using Auth.Model.InfrastructureInterfaces;
+using Auth.Model.Validators;
+using FluentValidation.Results;
 
 namespace Auth.Service
 {
@@ -17,6 +19,8 @@ namespace Auth.Service
     {
 
         private string secretKey = "auhfeisoruvbe0t3ertbhe45tbe5ter5gu39485793084679084256932854902375niudgh";
+        private UserValidator validator;
+
 
         private readonly IUserInfrastructureService _userInfrastructureService;
 
@@ -28,6 +32,7 @@ namespace Auth.Service
         {
             _appSettings = appSettings.Value;
             _userInfrastructureService = userInfrastructureService;
+            validator = new UserValidator();
         }
 
         public string Authenticate(AuthenticateRequest model)
@@ -47,6 +52,8 @@ namespace Auth.Service
         public string Register(RegistrationRequest model)
         {
             IEnumerable<User> allUsers = _userInfrastructureService.GetAll();
+
+            /*
             foreach (var u in allUsers)
             {
                 if (u.UserName.Equals(model.Username))
@@ -61,11 +68,13 @@ namespace Auth.Service
             if (!IsValid(model.Email))
             {
                 throw new InvalidEmailFormatException();
-            }           
+            }     */      
 
             
-            User user = new User(model.FirstName, model.LastName, model.Username, model.Email, model.Password, model.IsAdmin);
+            User user = new User(model.FirstName, model.LastName, model.UserName, model.Email, model.Password, model.IsAdmin);
             _userInfrastructureService.SaveUser(user);
+            //ValidationResult results = validator.Validate(user);
+           
 
             // authentication successful so generate jwt token
             var token = generateJwtToken(user);

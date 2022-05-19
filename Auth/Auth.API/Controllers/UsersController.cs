@@ -2,6 +2,9 @@
 using Auth.Model;
 using Auth.Service;
 using System;
+using Auth.Model.Validators;
+using System.Collections.Generic;
+using FluentValidation.Results;
 
 namespace Auth.API.Controllers
 {
@@ -35,6 +38,22 @@ namespace Auth.API.Controllers
         [HttpPost("register")]
         public IActionResult Register(RegistrationRequest model)
         {
+            UserValidator validator = new UserValidator();
+            List<string> ValidationMessages = new List<string>();
+            var validationResult = validator.Validate(model);
+            var response = new ResponseModel();
+            if (!validationResult.IsValid)
+            {
+                response.IsValid = false;
+                foreach (ValidationFailure failure in validationResult.Errors)
+                {
+                    ValidationMessages.Add(failure.ErrorMessage);
+                }
+                response.ValidationMessages = ValidationMessages;
+                return BadRequest(new { StatusCode = 400, Message = response.ValidationMessages });
+            }
+            return Ok(response);
+            /*
             try
             {
                 var response = _userService.Register(model);
@@ -43,8 +62,8 @@ namespace Auth.API.Controllers
             catch (Exception e)
             {
                 return BadRequest(new { StatusCode = 400, Message =  e.Message});
-            }
-            
+            } */
+
         }
 
         [HttpGet]
