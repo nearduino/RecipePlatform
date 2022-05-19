@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Auth.Model;
-using Auth.Service;
 using System;
+using Auth.Model.Validators;
+using System.Collections.Generic;
+using FluentValidation.Results;
 
 namespace Auth.API.Controllers
 {
@@ -35,16 +37,33 @@ namespace Auth.API.Controllers
         [HttpPost("register")]
         public IActionResult Register(RegistrationRequest model)
         {
-            try
+            UserValidator validator = new UserValidator();
+            List<string> ValidationMessages = new List<string>();
+            var validationResult = validator.Validate(model);
+            var response = new ResponseModel();
+            if (!validationResult.IsValid)
             {
-                var response = _userService.Register(model);
-                return Ok(new { StatusCode = 200, Token = response });
+                response.IsValid = false;
+                foreach (ValidationFailure failure in validationResult.Errors)
+                {
+                    ValidationMessages.Add(failure.ErrorMessage);
+                }
+                response.ValidationMessages = ValidationMessages;
+                return BadRequest(new { StatusCode = 400, Message = response.ValidationMessages });
             }
-            catch (Exception e)
+            else
             {
-                return BadRequest(new { StatusCode = 400, Message =  e.Message});
-            }
-            
+                try
+                {
+                    string token = _userService.Register(model);
+                    return Ok(new { StatusCode = 200, Token = token });
+                }
+                catch (Exception e)
+                {
+                    return BadRequest(new { StatusCode = 400, Message = e.Message });
+                }
+                
+            }         
         }
 
         [HttpGet]

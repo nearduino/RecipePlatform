@@ -7,7 +7,6 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using Auth.Model;
-using System.Text.RegularExpressions;
 using Auth.Model.Exceptions;
 using Auth.Model.InfrastructureInterfaces;
 
@@ -47,9 +46,11 @@ namespace Auth.Service
         public string Register(RegistrationRequest model)
         {
             IEnumerable<User> allUsers = _userInfrastructureService.GetAll();
+            
+            // checking if username or email is already taken in database, return exception 
             foreach (var u in allUsers)
             {
-                if (u.UserName.Equals(model.Username))
+                if (u.UserName.Equals(model.UserName))
                 {
                     throw new UsernameIsTakenException();
                 }
@@ -57,46 +58,16 @@ namespace Auth.Service
                 {
                     throw new EmailIsTakenException();
                 }
-            }
-            if (!IsValid(model.Email))
-            {
-                throw new InvalidEmailFormatException();
-            }           
-
-            
-            User user = new User(model.FirstName, model.LastName, model.Username, model.Email, model.Password, model.IsAdmin);
-            _userInfrastructureService.SaveUser(user);
+            }              
+          
+            User user = new User(model.FirstName, model.LastName, model.UserName, model.Email, model.Password, model.IsAdmin);
+            _userInfrastructureService.SaveUser(user);           
 
             // authentication successful so generate jwt token
             var token = generateJwtToken(user);
 
             return token;
-        }
-
-        bool IsValid(string email)
-        {
-            
-            var trimmedEmail = email.Trim();
-
-            if (trimmedEmail.EndsWith("."))
-            {
-                return false; 
-            }
-            try
-            {
-                Regex regex = new Regex(@"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$");
-                Match match = regex.Match(email);
-                if (match.Success)
-                    return true;
-                else
-                    return false;
-            }
-            catch
-            {
-                return false;
-            }
-        }
-               
+        }              
 
         public IEnumerable<User> GetAll()
         {
