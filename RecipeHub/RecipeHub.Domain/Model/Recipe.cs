@@ -3,6 +3,7 @@ using System.Buffers.Text;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Reflection.Metadata.Ecma335;
 using System.Text;
 using System.Threading.Tasks;
 using RecipeHub.Domain.Model.Enums;
@@ -19,15 +20,31 @@ namespace RecipeHub.Domain.Model
         public string Description { get; private set; }        
         public string Instructions { get; private set; }
 
-        private readonly List<Comment> _comments;
-        public List<Comment> Comments => new (_comments);
+        private List<Comment> _comments;
+        //public List<Comment> Comments => new (_comments);
+        public List<Comment> Comments
+        {
+            get => new(_comments);
+            private set => _comments = value;
+        }
 
         private List<RecipeIngredient> _recipeIngredients;
-        public List<RecipeIngredient> RecipeIngredients => new (_recipeIngredients);
+        //public List<RecipeIngredient> RecipeIngredients => new (_recipeIngredients);
+        public List<RecipeIngredient> RecipeIngredients
+        {
+            get => new (_recipeIngredients);
+            private set => _recipeIngredients = value;
+        }
         public uint PreparationTime { get; set; }
         public string ImgSrc { get; private set; }
 
         public Guid UserId { get; private set; }
+
+        private Recipe()
+        {
+            _comments = new List<Comment>();
+            _recipeIngredients = new List<RecipeIngredient>();
+        }
 
         public Recipe(Category category, string name, string desc, string instructions, uint preparationTime,
             List<RecipeIngredient> recipeIngredients, List<Comment> comments, Guid userId, Guid id)

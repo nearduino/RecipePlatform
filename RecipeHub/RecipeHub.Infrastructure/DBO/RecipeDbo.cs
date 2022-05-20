@@ -19,6 +19,7 @@ namespace RecipeHub.Infrastructure.DBO
         public List<RecipeIngredientDbo> RecipeIngredientsDbo { get; set; }
         public uint PreparationTime { get; set; }
         public string ImgSrc { get; set; }
+<<<<<<< HEAD
         public Guid UserId { get; set; }
 
         //Objanjenje (na srpskom radi lakseg razumevanja): Entity framework ne dozvoljava tracking vise entiteta sa
@@ -109,5 +110,8 @@ namespace RecipeHub.Infrastructure.DBO
                 }
             }
         }
+=======
+        public int UserId { get; set; }
+>>>>>>> main
     }
 }

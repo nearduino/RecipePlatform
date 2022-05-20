@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Reflection.Metadata;
 using System.Reflection.Metadata.Ecma335;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using RecipeHub.API.Attributes;
 using RecipeHub.API.DTO;
 using RecipeHub.Domain.Model;
 using RecipeHub.Domain.Model.Exceptions;
@@ -29,6 +31,7 @@ namespace RecipeHub.API.Controllers
         [HttpGet]
         public IActionResult GetAll()
         {
+            var id = HttpContext.Items["id"];
             try
             {
                 return Ok(_recipeService.GetAll());
@@ -60,10 +63,16 @@ namespace RecipeHub.API.Controllers
             }
         }
 
+        [JwtUserAuthorization]
         [HttpPost]
         public IActionResult PostRecipe(RecipeDto dto)
         {
+<<<<<<< HEAD
             List<Tuple<Guid, int>>ingredientIds = new List<Tuple<Guid, int>>();
+=======
+            var userId = int.Parse((string)HttpContext.Items["id"] ?? string.Empty);
+            List<Tuple<int, int>>ingredientIds = new List<Tuple<int, int>>();
+>>>>>>> main
             foreach (var ingr in dto.Ingredients)
             {
                 ingredientIds.Add(new Tuple<Guid, int>(ingr.IngredientId, ingr.Quantity));
@@ -78,7 +87,7 @@ namespace RecipeHub.API.Controllers
                     dto.Instructions,
                     dto.PreparationTime,
                     ingredientIds,
-                    dto.UserId);
+                    userId);
             }
             catch (Exception ex)
             {
@@ -96,19 +105,32 @@ namespace RecipeHub.API.Controllers
                         return Unauthorized("Invalid user id");
                     case EntityNotFoundException:
                         return NotFound(ex.Message);
+                    default:
+                        return Problem(ex.Message);
                 }
             }
             return Ok("Successfully created new recipe");
         }
-
+        [JwtUserAuthorization]
         [HttpPut]
         public IActionResult UpdateRecipe(UpdateRecipeDto dto)
         {
+<<<<<<< HEAD
             List<Tuple<Guid, int>> ingredientIds = new List<Tuple<Guid, int>>();
+=======
+            var fromDatabase = _recipeService.GetById(dto.Id);
+            if (int.Parse((string)HttpContext.Items["id"] ?? string.Empty) != fromDatabase.UserId)
+            {
+                return Unauthorized("Cannot edit recipes of another user");
+            }
+            List<Tuple<int, int>> ingredientIds = new List<Tuple<int, int>>();
+>>>>>>> main
             foreach (var ingr in dto.Ingredients)
             {
                 ingredientIds.Add(new Tuple<Guid, int>(ingr.IngredientId, ingr.Quantity));
             }
+
+            ingredientIds = ingredientIds.OrderBy(i => i.Item1).ToList();
             _recipeService.UpdateRecipe(dto.Id,
                 dto.Category,
                 dto.Name,
@@ -116,13 +138,18 @@ namespace RecipeHub.API.Controllers
                 dto.Instructions,
                 dto.PreparationTime,
                 ingredientIds,
-                dto.UserId);
+                fromDatabase.UserId);
             return Ok("Recipe updated successfully");
         }
 
+        [JwtAdminAuthorization]
         [HttpDelete]
         public IActionResult DeleteRecipe(DeleteRecipeDto dto)
         {
+            var userId = int.Parse((string)HttpContext.Items["id"] ?? string.Empty);
+            bool isAdmin = HttpContext.Items["isAdmin"].Equals("True");
+            var rec = _recipeService.GetById(dto.RecipeId);
+            if (!isAdmin && userId != rec.UserId) return Unauthorized();
             _recipeService.DeleteRecipe(dto.RecipeId);
             return Ok();
         }

@@ -8,4 +8,8 @@
     <Compile Remove="RegistrationResponse.cs" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="FluentValidation" Version="11.0.1" />
+  </ItemGroup>
+
 </Project>

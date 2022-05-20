@@ -13,6 +13,8 @@ namespace RecipeHub.Domain.Model
         public uint Rating { get; set; }
         public string Text { get; set; }
 
+        private Comment(){}
+
         public Comment(uint rating, string text)
         {
             Rating = rating;

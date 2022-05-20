@@ -13,6 +13,8 @@ namespace RecipeHub.Domain.Model
         public int Quantity { get; private set; }
         public Ingredient Ingredient { get; private set; }
 
+        private RecipeIngredient(){}
+
         public RecipeIngredient(int quantity, Ingredient ingredient)
         {
             Quantity = quantity;

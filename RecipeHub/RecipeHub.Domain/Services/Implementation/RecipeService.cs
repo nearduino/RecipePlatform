@@ -78,6 +78,7 @@ namespace RecipeHub.Domain.Services.Implementation
             foreach (var ingrId in ingrIds) ingredientIds.Add(ingrId.Item1);
             var ingredients = _ingredientInfrastructureService.GetIngredientsByIds(ingredientIds);
             if (ingredients.Count() != ingrIds.Count()) throw new EntityNotFoundException("ingredient");
+            ingredients = ingredients.OrderBy(i => i.Id);
             return ingredients;
         }
     }
