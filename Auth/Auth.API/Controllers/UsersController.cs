@@ -29,7 +29,11 @@ namespace Auth.API.Controllers
             }
             catch(Exception e)
             {
-                return BadRequest(new { StatusCode = 403, Message = e.Message });
+                if(e.Message.Equals("Error with database connection."))
+                {
+                    return BadRequest(new { StatusCode = 500, Message = e.Message });
+                }
+                return BadRequest(new { StatusCode = 400, Message = e.Message });
 
             }      
         }

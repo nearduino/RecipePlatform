@@ -31,7 +31,15 @@ namespace Auth.Service
 
         public string Authenticate(AuthenticateRequest model)
         {
-            IEnumerable<User> allUsers = _userInfrastructureService.GetAll();
+            IEnumerable<User> allUsers;
+            try
+            {
+                allUsers = _userInfrastructureService.GetAll();
+            }
+            catch (Exception e)
+            {
+                throw new DatabaseConnectionException();
+            }
             var user = allUsers.SingleOrDefault(x => x.UserName == model.Username && x.Password == model.Password);
 
             // return null if user not found
@@ -45,7 +53,16 @@ namespace Auth.Service
 
         public string Register(RegistrationRequest model)
         {
-            IEnumerable<User> allUsers = _userInfrastructureService.GetAll();
+            IEnumerable<User> allUsers;
+            try
+            {
+                allUsers = _userInfrastructureService.GetAll();
+            }
+            catch(Exception e)
+            {
+                throw new DatabaseConnectionException();
+            }
+            
             
             // checking if username or email is already taken in database, return exception 
             foreach (var u in allUsers)
