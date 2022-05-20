@@ -17,7 +17,7 @@ namespace Auth.Model
 
         [JsonIgnore]
         public string Password { get; set; }
-
+        public string Confirm { get; set; }
         public User(string fName, string lName, string uName, string mail, string pass, bool isAdmin)
         {     
             FirstName = fName;
@@ -35,6 +35,16 @@ namespace Auth.Model
             UserName = uName;
             Email = mail;
             Password = pass;
+            IsAdmin = isAdmin;
+        }
+        public User(string fName, string lName, string uName, string mail, string pass, string confirm, bool isAdmin)
+        {
+            FirstName = fName;
+            LastName = lName;
+            UserName = uName;
+            Email = mail;
+            Password = pass;
+            Confirm = confirm;
             IsAdmin = isAdmin;
         }
     }
