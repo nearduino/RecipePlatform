@@ -67,12 +67,8 @@ namespace RecipeHub.API.Controllers
         [HttpPost]
         public IActionResult PostRecipe(RecipeDto dto)
         {
-<<<<<<< HEAD
-            List<Tuple<Guid, int>>ingredientIds = new List<Tuple<Guid, int>>();
-=======
             var userId = int.Parse((string)HttpContext.Items["id"] ?? string.Empty);
-            List<Tuple<int, int>>ingredientIds = new List<Tuple<int, int>>();
->>>>>>> main
+            List<Tuple<Guid, int>> ingredientIds = new List<Tuple<Guid, int>>();
             foreach (var ingr in dto.Ingredients)
             {
                 ingredientIds.Add(new Tuple<Guid, int>(ingr.IngredientId, ingr.Quantity));
@@ -115,16 +111,12 @@ namespace RecipeHub.API.Controllers
         [HttpPut]
         public IActionResult UpdateRecipe(UpdateRecipeDto dto)
         {
-<<<<<<< HEAD
             List<Tuple<Guid, int>> ingredientIds = new List<Tuple<Guid, int>>();
-=======
             var fromDatabase = _recipeService.GetById(dto.Id);
             if (int.Parse((string)HttpContext.Items["id"] ?? string.Empty) != fromDatabase.UserId)
             {
                 return Unauthorized("Cannot edit recipes of another user");
             }
-            List<Tuple<int, int>> ingredientIds = new List<Tuple<int, int>>();
->>>>>>> main
             foreach (var ingr in dto.Ingredients)
             {
                 ingredientIds.Add(new Tuple<Guid, int>(ingr.IngredientId, ingr.Quantity));
