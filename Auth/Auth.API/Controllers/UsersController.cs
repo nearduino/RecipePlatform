@@ -4,6 +4,7 @@ using System;
 using Auth.Model.Validators;
 using System.Collections.Generic;
 using FluentValidation.Results;
+using Microsoft.AspNetCore.Http;
 
 namespace Auth.API.Controllers
 {
@@ -31,9 +32,11 @@ namespace Auth.API.Controllers
             {
                 if(e.Message.Equals("Error with database connection."))
                 {
-                    return BadRequest(new { StatusCode = 500, Message = e.Message });
+                    // return BadRequest(new { StatusCode = 500, Message = e.Message });
+                    return StatusCode(StatusCodes.Status500InternalServerError);
                 }
                 return BadRequest(new { StatusCode = 403, Message = e.Message });
+                
 
             }      
         }
@@ -64,9 +67,16 @@ namespace Auth.API.Controllers
                 }
                 catch (Exception e)
                 {
+                    if (e.Message.Equals("Error with database connection."))
+                    {
+                        // return BadRequest(new { StatusCode = 500, Message = e.Message });
+                        return StatusCode(StatusCodes.Status500InternalServerError);
+                    }
                     return BadRequest(new { StatusCode = 400, Message = e.Message });
+                  
+
                 }
-                
+
             }         
         }
 

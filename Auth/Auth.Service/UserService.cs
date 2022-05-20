@@ -34,7 +34,7 @@ namespace Auth.Service
             IEnumerable<User> allUsers;
             try
             {
-                allUsers = _userInfrastructureService.GetAll();
+               allUsers = _userInfrastructureService.GetAll();
             }
             catch (Exception e)
             {
