@@ -22,10 +22,6 @@ namespace Auth.unitTests
 
             List < User > registered = new List<User>();
 
-            registered.Add(new User("ime 1", "prz 1", "usrnm 1", "mail1", "pass1", "pass1", false));
-            registered.Add(new User("ime 2", "prz 1", "usrnm 2", "mail1", "pass1", "pass1", true));
-            registered.Add(new User("ime 3", "prz 1", "usrnm 1", "mail3", "pass1", "pass1", true));
-
             stub.Setup(s => s.GetAll()).Returns(registered);
 
             UserService us = new UserService(stub.Object);
@@ -53,11 +49,11 @@ namespace Auth.unitTests
         {
             List<object[]> retVal = new List<object[]>();
 
-            User u1 = new User("ime 1", "prz 1", "usrnm 1", "mail1", "pass1", "pass1", true);
+            //User u1 = new User("ime 1", "prz 1", "usrnm1", "mail1", "pass1", "pass1", true);
 
-            User u2 = new User("ime 2", "prz 2", "usrnm 2", "mail1", "pass2", "pass2", false);
+           // User u2 = new User("ime 2", "prz 2", "usrnm2", "mail1", "pass2", "pass2", false);
 
-            User u3 = new User("ime 3", "prz 3", "usrnm 1", "mail2", "pass3", "pass3", false);
+            User u3 = new User("ime 3", "prz 3", "usrnm1", "mail2", "pass3", "pass3", false);
 
             User u4 = new User("", "prz 3", "usrnm 4", "mail4", "pass3", "pass3", false);
 
@@ -73,9 +69,9 @@ namespace Auth.unitTests
 
             
 
-            RegistrationRequest r1 = new RegistrationRequest(u1.Email, u1.FirstName, u1.LastName, u1.UserName, u1.Password, u1.Confirm, u1.IsAdmin);
+            //RegistrationRequest r1 = new RegistrationRequest(u1.Email, u1.FirstName, u1.LastName, u1.UserName, u1.Password, u1.Confirm, u1.IsAdmin);
 
-            RegistrationRequest r2 = new RegistrationRequest(u2.Email, u2.FirstName, u2.LastName, u2.UserName, u2.Password, u2.Confirm, u2.IsAdmin);
+           // RegistrationRequest r2 = new RegistrationRequest(u2.Email, u2.FirstName, u2.LastName, u2.UserName, u2.Password, u2.Confirm, u2.IsAdmin);
 
             RegistrationRequest r3 = new RegistrationRequest(u3.Email, u3.FirstName, u3.LastName, u3.UserName, u3.Password, u3.Confirm, u3.IsAdmin);
 
@@ -91,7 +87,7 @@ namespace Auth.unitTests
 
             RegistrationRequest r9 = new RegistrationRequest(u9.Email, u9.FirstName, u9.LastName, u9.UserName, u9.Password, u9.Confirm, u9.IsAdmin);
 
-            retVal.Add(new object[]
+           /* retVal.Add(new object[]
             {
                 r1
             });
@@ -99,7 +95,7 @@ namespace Auth.unitTests
             retVal.Add(new object[]
             {
                 r2
-            });
+            });*/
 
             retVal.Add(new object[]
             {
@@ -139,15 +135,23 @@ namespace Auth.unitTests
             return retVal;
         }
 
-        //[Fact]
-        //[MemberData(nameof(ValidateUsers))]
-        //public void ValidateUsers_should_throw_exception(AuthenticateRequest a)
-       // {
-          //  bool exceptionThrown = false;
+        [Theory]
+        [MemberData(nameof(ValidateUsers))]
+        public void ValidateUsers_should_throw_exception(AuthenticateRequest a)
+        {
+            bool exceptionThrown = false;
 
-          //  try
-         /*   {
-                //us.Authenticate(a);
+            var stub = new Mock<IUserInfrastructureService>();
+
+            List<User> registered = new List<User>();
+
+            stub.Setup(s => s.GetAll()).Returns(registered);
+
+            UserService us = new UserService(stub.Object);
+
+            try
+            {
+                us.Authenticate(a);
             }
             catch (LogInException)
             {
@@ -157,10 +161,10 @@ namespace Auth.unitTests
             {
                 exceptionThrown = true;
             }
-            Assert.False(exceptionThrown);
+            Assert.True(exceptionThrown);
         }
 
-        /*public static IEnumerable<object[]> ValidateUsers()
+        public static IEnumerable<object[]> ValidateUsers()
         {
             List<object[]> retVal = new List<object[]>();
 
@@ -210,6 +214,6 @@ namespace Auth.unitTests
             });
 
             return retVal;
-        }*/
+        }
     }
 }

@@ -9,5 +9,11 @@ namespace Auth.Model
 
         [Required]
         public string Password { get; set; }
+
+        public AuthenticateRequest(string usr, string pass)
+        {
+            Username = usr;
+            Password = pass;
+        }
     }
 }
