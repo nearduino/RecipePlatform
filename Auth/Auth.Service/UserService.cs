@@ -9,6 +9,7 @@ using System.Text;
 using Auth.Model;
 using Auth.Model.Exceptions;
 using Auth.Model.InfrastructureInterfaces;
+using System.Security.Cryptography;
 
 namespace Auth.Service
 {
@@ -18,6 +19,8 @@ namespace Auth.Service
         private string secretKey = "auhfeisoruvbe0t3ertbhe45tbe5ter5gu39485793084679084256932854902375niudgh";
 
         private readonly IUserInfrastructureService _userInfrastructureService;
+
+        public string salt;
 
         // users hardcoded for simplicity, store in a db with hashed passwords in production applications
 
@@ -74,7 +77,7 @@ namespace Auth.Service
                 }
             }              
           
-            User user = new User(model.FirstName, model.LastName, model.UserName, model.Email, model.Password, model.IsAdmin);
+            User user = new User(model.FirstName, model.LastName, model.UserName, model.Email, PassEncoding(model.Password), model.IsAdmin);
             _userInfrastructureService.SaveUser(user);           
 
             // authentication successful so generate jwt token
@@ -108,6 +111,28 @@ namespace Auth.Service
             };
             var token = tokenHandler.CreateToken(tokenDescriptor);
             return tokenHandler.WriteToken(token);
+        }
+
+        public static string CreateSalt(int size)
+        {
+            //Generate a cryptographic random number.
+            RNGCryptoServiceProvider rng = new RNGCryptoServiceProvider();
+            byte[] buff = new byte[size];
+            rng.GetBytes(buff);
+
+            // Return a Base64 string representation of the random number.
+            return Convert.ToBase64String(buff);
+        }
+        private string PassEncoding(string password)
+        {
+            using (var sha = SHA256.Create())
+            {
+                salt = CreateSalt(16);
+
+                var computedHash = sha.ComputeHash(Encoding.Unicode.GetBytes(salt + password));
+
+                return Convert.ToBase64String(computedHash);
+            }
         }
     }
 }
