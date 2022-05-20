@@ -37,12 +37,12 @@ namespace RecipeHub.API.Middleware
             try
             {
                 var handler = new JwtSecurityTokenHandler();
-                if (atr.GetType() == typeof(JwtAdminAuthotizationAttribute))
+                if (atr.GetType() == typeof(JwtAdminAuthorizationAttribute))
                     if (await HandleAdminAuthorization(context, handler, token)) return;
                 if (atr.GetType() == typeof(JwtUserAuthorizationAttribute))
                     HandleUserAuthorization(context, handler, token);
-                if (atr.GetType() == typeof(JwtAdminOrSameUserIdAuthorization))
-                    if (await HandleAdminOrSameUserIdAuthorization(context, handler, token)) return;
+               // if (atr.GetType() == typeof(JwtAdminOrSameUserIdAuthorization))
+               //     if (await HandleAdminOrSameUserIdAuthorization(context, handler, token)) return;
             }
             catch (Exception)
             {
@@ -64,7 +64,7 @@ namespace RecipeHub.API.Middleware
                 return true;
             }
 
-            context.Items.Add("admin", jwtSecurityToken.Claims.First(claim => claim.Type == "isAdmin").Value);
+            context.Items.Add("isAdmin", jwtSecurityToken.Claims.First(claim => claim.Type == "isAdmin").Value);
             return false;
         }
 
@@ -93,7 +93,7 @@ namespace RecipeHub.API.Middleware
                     return true;
                 }
 
-                userId = (int)reader.Value;
+                userId = Convert.ToInt32(reader.Value);
             }
 
             var jwtSecurityToken = handler.ReadJwtToken(token);

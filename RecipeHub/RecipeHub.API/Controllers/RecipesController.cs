@@ -101,6 +101,8 @@ namespace RecipeHub.API.Controllers
                         return Unauthorized("Invalid user id");
                     case EntityNotFoundException:
                         return NotFound(ex.Message);
+                    default:
+                        return Problem(ex.Message);
                 }
             }
             return Ok("Successfully created new recipe");
@@ -109,7 +111,8 @@ namespace RecipeHub.API.Controllers
         [HttpPut]
         public IActionResult UpdateRecipe(UpdateRecipeDto dto)
         {
-            if (int.Parse((string)HttpContext.Items["id"] ?? string.Empty) != dto.UserId)
+            var fromDatabase = _recipeService.GetById(dto.Id);
+            if (int.Parse((string)HttpContext.Items["id"] ?? string.Empty) != fromDatabase.UserId)
             {
                 return Unauthorized("Cannot edit recipes of another user");
             }
@@ -118,6 +121,8 @@ namespace RecipeHub.API.Controllers
             {
                 ingredientIds.Add(new Tuple<int, int>(ingr.IngredientId, ingr.Quantity));
             }
+
+            ingredientIds = ingredientIds.OrderBy(i => i.Item1).ToList();
             _recipeService.UpdateRecipe(dto.Id,
                 dto.Category,
                 dto.Name,
@@ -125,14 +130,18 @@ namespace RecipeHub.API.Controllers
                 dto.Instructions,
                 dto.PreparationTime,
                 ingredientIds,
-                dto.UserId);
+                fromDatabase.UserId);
             return Ok("Recipe updated successfully");
         }
 
-        [JwtAdminOrSameUserIdAuthorization]
+        [JwtAdminAuthorization]
         [HttpDelete]
         public IActionResult DeleteRecipe(DeleteRecipeDto dto)
         {
+            var userId = int.Parse((string)HttpContext.Items["id"] ?? string.Empty);
+            bool isAdmin = HttpContext.Items["isAdmin"].Equals("True");
+            var rec = _recipeService.GetById(dto.RecipeId);
+            if (!isAdmin && userId != rec.UserId) return Unauthorized();
             _recipeService.DeleteRecipe(dto.RecipeId);
             return Ok();
         }
