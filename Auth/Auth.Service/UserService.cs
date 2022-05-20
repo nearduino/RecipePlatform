@@ -21,11 +21,8 @@ namespace Auth.Service
 
         // users hardcoded for simplicity, store in a db with hashed passwords in production applications
 
-        private readonly AppSettings _appSettings;
-
-        public UserService(IOptions<AppSettings> appSettings, IUserInfrastructureService userInfrastructureService)
-        {
-            _appSettings = appSettings.Value;
+        public UserService(IUserInfrastructureService userInfrastructureService)
+        {        
             _userInfrastructureService = userInfrastructureService;
         }
 
