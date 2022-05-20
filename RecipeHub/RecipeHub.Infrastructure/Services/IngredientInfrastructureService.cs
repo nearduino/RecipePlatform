@@ -18,7 +18,7 @@ namespace RecipeHub.Infrastructure.Services
         {
             _ingredientRepository = repo;
         }
-        public IEnumerable<Ingredient> GetIngredientsByIds(IEnumerable<int> ids)
+        public IEnumerable<Ingredient> GetIngredientsByIds(IEnumerable<Guid> ids)
         {
             List<Ingredient> ingredients = new List<Ingredient>();
             var ingredintsDbos = _ingredientRepository.GetByIds(ids);

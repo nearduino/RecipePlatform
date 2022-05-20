@@ -1,8 +1,10 @@
-﻿namespace RecipeHub.API.DTO
+﻿using System;
+
+namespace RecipeHub.API.DTO
 {
     public class RecipeIngredientDto
     {
-        public int IngredientId { get; set; }
+        public Guid IngredientId { get; set; }
         public int Quantity { get; set; }
     }
 }

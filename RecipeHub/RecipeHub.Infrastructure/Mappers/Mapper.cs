@@ -98,6 +98,23 @@ namespace RecipeHub.Infrastructure.Mappers
             };
         }
 
+        public static Article Map(ArticleDbo dbo)
+        {
+            if (dbo == null) return null;
+            return new Article(dbo.Id, dbo.Title, dbo.Text);
+        }
+
+        public static ArticleDbo Map(Article article)
+        {
+            if (article == null) return null;
+            return new ArticleDbo
+            {
+                Id = article.Id,
+                Title = article.Title,
+                Text = article.Text
+            };
+        }
+
         public static RecipeIngredientDbo Map(RecipeIngredient recipeIngredient)
         {
             if(recipeIngredient == null)return null;

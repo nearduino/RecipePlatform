@@ -49,7 +49,7 @@ namespace RecipeHub.Infrastructure.Services
                 _recipeRepository.Add(dbo);
         }
 
-        public Recipe GetById(int id)
+        public Recipe GetById(Guid id)
         {
             var dbo = _recipeRepository.GetById(id, FetchType.Eager);
             var recipe = _mapper.Map<Recipe>(dbo);
@@ -65,7 +65,7 @@ namespace RecipeHub.Infrastructure.Services
             _recipeRepository.Update(fromDatabase);
         }
 
-        public void Delete(int id)
+        public void Delete(Guid id)
         {
             _recipeRepository.Delete(_recipeRepository.GetById(id));
         }

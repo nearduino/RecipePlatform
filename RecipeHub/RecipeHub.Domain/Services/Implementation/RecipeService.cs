@@ -27,9 +27,9 @@ namespace RecipeHub.Domain.Services.Implementation
         }
 
         public void CreateNewRecipe(Category category, string name, string description, string instructions, uint preparationTime,
-            IEnumerable<Tuple<int, int>> recipeIngredientIds, int userId)
+            IEnumerable<Tuple<Guid, int>> recipeIngredientIds, Guid userId)
         {
-            var ingrIds = recipeIngredientIds as Tuple<int, int>[] ?? recipeIngredientIds.ToArray();
+            var ingrIds = recipeIngredientIds as Tuple<Guid, int>[] ?? recipeIngredientIds.ToArray();
             var ingredients = ExtractIngredients(ingrIds);
             List<RecipeIngredient> recipeIngredients = new List<RecipeIngredient>();
             foreach (var recipeIngredient in ingredients.Zip(ingrIds))
@@ -41,15 +41,15 @@ namespace RecipeHub.Domain.Services.Implementation
             _recipeInfrastructureService.SaveRecipe(recipe);
         }
 
-        public Recipe GetById(int id)
+        public Recipe GetById(Guid id)
         {
             return _recipeInfrastructureService.GetById(id);
         }
 
-        public void UpdateRecipe(int id, Category category, string name, string description, string instructions, uint preparationTime,
-            IEnumerable<Tuple<int, int>> recipeIngredientIds, int userId)
+        public void UpdateRecipe(Guid id, Category category, string name, string description, string instructions, uint preparationTime,
+            IEnumerable<Tuple<Guid, int>> recipeIngredientIds, Guid userId)
         {
-            var ingrIds = recipeIngredientIds as Tuple<int, int>[] ?? recipeIngredientIds.ToArray();
+            var ingrIds = recipeIngredientIds as Tuple<Guid, int>[] ?? recipeIngredientIds.ToArray();
             var ingredients = ExtractIngredients(ingrIds);
             List<RecipeIngredient> recipeIngredients = new List<RecipeIngredient>();
             foreach (var recipeIngredient in ingredients.Zip(ingrIds))
@@ -67,14 +67,14 @@ namespace RecipeHub.Domain.Services.Implementation
             _recipeInfrastructureService.UpdateRecipe(recipe);
         }
 
-        public void DeleteRecipe(int id)
+        public void DeleteRecipe(Guid id)
         {
             _recipeInfrastructureService.Delete(id);
         }
 
-        private IEnumerable<Ingredient> ExtractIngredients(Tuple<int, int>[] ingrIds)
+        private IEnumerable<Ingredient> ExtractIngredients(Tuple<Guid, int>[] ingrIds)
         {
-            List<int> ingredientIds = new List<int>();
+            List<Guid> ingredientIds = new List<Guid>();
             foreach (var ingrId in ingrIds) ingredientIds.Add(ingrId.Item1);
             var ingredients = _ingredientInfrastructureService.GetIngredientsByIds(ingredientIds);
             if (ingredients.Count() != ingrIds.Count()) throw new EntityNotFoundException("ingredient");
