@@ -62,7 +62,7 @@ namespace RecipeHub.UnitTests
                             CaloriesPerUnit = 1,
                             Id = 1,
                             MeasureUnit = 0,
-                            Name = "sdasdasd"
+                            Name = "Sdasdasd"
                         },
                         IngredientDboId = 1,
                         Quantity = 2
@@ -83,6 +83,58 @@ namespace RecipeHub.UnitTests
             dbo.IngredientDboId.ShouldBe(5);
             dbo.IngredientDbo.Id.ShouldBe(5);
             dbo.IngredientDbo.CaloriesPerUnit.ShouldBe(1);
+        }
+
+        [Fact]
+        public void Test_ingredientDbo_to_ingredient()
+        {
+            IngredientDbo dbo = new IngredientDbo
+            {
+                CaloriesPerUnit = 2,
+                Id = 2,
+                MeasureUnit = MeasureUnit.g,
+                Name = "Ingr"
+            };
+            var ingr = _mapper.Map<Ingredient>(dbo);
+            ingr.Id.ShouldBe(2);
+            ingr.CaloriesPerUnit.ShouldBe(2);
+            ingr.MeasureUnit.ShouldBe(MeasureUnit.g);
+        }
+
+        [Fact]
+        public void Test_commentDbo_to_Comment()
+        {
+            var commentDbo = new CommentDbo
+            {
+                Id = 1,
+                Rating = 2,
+                Text = "Text"
+            };
+            var comment = _mapper.Map<Comment>(commentDbo);
+            comment.Id.ShouldBe(1);
+            ((int)comment.Rating).ShouldBe(2);
+            comment.Text.ShouldBe("Text");
+        }
+
+        [Fact]
+        public void Test_recipeIngredientDbo_to_recipeIngredient()
+        {
+            var dbo = new RecipeIngredientDbo
+            {
+                IngredientDbo = new IngredientDbo
+                {
+                    CaloriesPerUnit = 2,
+                    Id = 1,
+                    MeasureUnit = MeasureUnit.g,
+                    Name = "Daj"
+                },
+                IngredientDboId = 1,
+                Quantity = 1
+            };
+            var recipeIngredient = _mapper.Map<RecipeIngredient>(dbo);
+            recipeIngredient.Quantity.ShouldBe(1);
+            recipeIngredient.Ingredient.ShouldNotBeNull();
+            recipeIngredient.Ingredient.Id.ShouldBe(1);
         }
     }
 }
