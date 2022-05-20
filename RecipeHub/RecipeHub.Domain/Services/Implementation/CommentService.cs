@@ -24,7 +24,7 @@ namespace RecipeHub.Domain.Implementations
 
         public IEnumerable<Comment> GetAll(Guid recipeId)
         {
-            return _recipeInfrastructureService.GetById(recipeId).Comments;
+            return _commentInfrastructureService.GetCommentsByRecipeId(recipeId);
         }
 
         public void CreateComment(Guid userId, Guid recipeId, Comment comment)

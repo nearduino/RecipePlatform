@@ -9,6 +9,7 @@ using System.Text;
 using Auth.Model;
 using Auth.Model.Exceptions;
 using Auth.Model.InfrastructureInterfaces;
+using System.Security.Cryptography;
 
 namespace Auth.Service
 {
@@ -19,19 +20,26 @@ namespace Auth.Service
 
         private readonly IUserInfrastructureService _userInfrastructureService;
 
+        public string salt;
+
         // users hardcoded for simplicity, store in a db with hashed passwords in production applications
 
-        private readonly AppSettings _appSettings;
-
-        public UserService(IOptions<AppSettings> appSettings, IUserInfrastructureService userInfrastructureService)
-        {
-            _appSettings = appSettings.Value;
+        public UserService(IUserInfrastructureService userInfrastructureService)
+        {        
             _userInfrastructureService = userInfrastructureService;
         }
 
         public string Authenticate(AuthenticateRequest model)
         {
-            IEnumerable<User> allUsers = _userInfrastructureService.GetAll();
+            IEnumerable<User> allUsers;
+            try
+            {
+               allUsers = _userInfrastructureService.GetAll();
+            }
+            catch (Exception e)
+            {
+                throw new DatabaseConnectionException();
+            }
             var user = allUsers.SingleOrDefault(x => x.UserName == model.Username && x.Password == model.Password);
 
             // return null if user not found
@@ -45,7 +53,16 @@ namespace Auth.Service
 
         public string Register(RegistrationRequest model)
         {
-            IEnumerable<User> allUsers = _userInfrastructureService.GetAll();
+            IEnumerable<User> allUsers;
+            try
+            {
+                allUsers = _userInfrastructureService.GetAll();
+            }
+            catch(Exception e)
+            {
+                throw new DatabaseConnectionException();
+            }
+            
             
             // checking if username or email is already taken in database, return exception 
             foreach (var u in allUsers)
@@ -60,7 +77,7 @@ namespace Auth.Service
                 }
             }              
           
-            User user = new User(model.FirstName, model.LastName, model.UserName, model.Email, model.Password, model.IsAdmin);
+            User user = new User(model.FirstName, model.LastName, model.UserName, model.Email, PassEncoding(model.Password), model.IsAdmin);
             _userInfrastructureService.SaveUser(user);           
 
             // authentication successful so generate jwt token
@@ -94,6 +111,28 @@ namespace Auth.Service
             };
             var token = tokenHandler.CreateToken(tokenDescriptor);
             return tokenHandler.WriteToken(token);
+        }
+
+        public static string CreateSalt(int size)
+        {
+            //Generate a cryptographic random number.
+            RNGCryptoServiceProvider rng = new RNGCryptoServiceProvider();
+            byte[] buff = new byte[size];
+            rng.GetBytes(buff);
+
+            // Return a Base64 string representation of the random number.
+            return Convert.ToBase64String(buff);
+        }
+        private string PassEncoding(string password)
+        {
+            using (var sha = SHA256.Create())
+            {
+                salt = CreateSalt(16);
+
+                var computedHash = sha.ComputeHash(Encoding.Unicode.GetBytes(salt + password));
+
+                return Convert.ToBase64String(computedHash);
+            }
         }
     }
 }

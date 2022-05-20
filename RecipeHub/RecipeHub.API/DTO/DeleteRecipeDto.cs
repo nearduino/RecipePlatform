@@ -4,7 +4,11 @@ namespace RecipeHub.API.DTO
 {
     public class DeleteRecipeDto
     {
+<<<<<<< HEAD
         public Guid UserId { get; set; }
         public Guid RecipeId { get; set; }
+=======
+        public int RecipeId { get; set; }
+>>>>>>> main
     }
 }

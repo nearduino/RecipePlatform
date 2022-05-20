@@ -8,7 +8,8 @@ namespace RecipeHub.Infrastructure.AutoMapperProfiles
     {
         public AutoMapperComment()
         {
-            CreateMap<CommentDbo, Comment>();
+            CreateMap<CommentDbo, Comment>()
+                .ConstructUsing(c => new Comment(c.Id, c.Rating, c.Text));
             CreateMap<Comment, CommentDbo>();
         }
     }

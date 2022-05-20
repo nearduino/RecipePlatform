@@ -56,7 +56,7 @@ namespace RecipeHub.Infrastructure.DBO
                 }
             }
         }
-
+        // D: Imamo add new comment, treba dodati remove comment
         private void AddNewComment(RecipeDbo dbo)
         {
             for (int i = 0; i < dbo.CommentsDbo.Count; i++)

@@ -1,0 +1,157 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net;
+using System.Reflection.Metadata;
+using System.Reflection.Metadata.Ecma335;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using RecipeHub.API.Attributes;
+using RecipeHub.API.DTO;
+using RecipeHub.Domain.Model;
+using RecipeHub.Domain.Model.Exceptions;
+using RecipeHub.Domain.Services;
+using RecipeHub.Infrastructure.DBO;
+using RecipeHub.Infrastructure.Repositories;
+using RecipeHub.Infrastructure.Repositories.Enums;
+
+namespace RecipeHub.API.Controllers
+{
+    [Route("api/[controller]")]
+    [ApiController]
+    public class RecipesController : ControllerBase
+    {
+        private readonly IRecipeService _recipeService;
+
+        public RecipesController(IRecipeService recipeService)
+        {
+            _recipeService = recipeService;
+        }
+
+        [HttpGet]
+        public IActionResult GetAll()
+        {
+            var id = HttpContext.Items["id"];
+            try
+            {
+                return Ok(_recipeService.GetAll());
+            }
+            catch (Exception ex)
+            {
+                return Problem(ex.Message);
+            }
+        }
+
+        [HttpGet("{id:int}")]
+        public IActionResult GetById(Guid id)
+        {
+            try
+            {
+                return Ok(_recipeService.GetById(id));
+            }
+            catch (EntityNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (InvalidOperationException)
+            {
+                return NotFound("Recipe not found");
+            }
+            catch (Exception e)
+            {
+                return Problem(e.Message);
+            }
+        }
+
+        [JwtUserAuthorization]
+        [HttpPost]
+        public IActionResult PostRecipe(RecipeDto dto)
+        {
+<<<<<<< HEAD
+            List<Tuple<Guid, int>>ingredientIds = new List<Tuple<Guid, int>>();
+=======
+            var userId = int.Parse((string)HttpContext.Items["id"] ?? string.Empty);
+            List<Tuple<int, int>>ingredientIds = new List<Tuple<int, int>>();
+>>>>>>> main
+            foreach (var ingr in dto.Ingredients)
+            {
+                ingredientIds.Add(new Tuple<Guid, int>(ingr.IngredientId, ingr.Quantity));
+            }
+
+            try
+            {
+                _recipeService.CreateNewRecipe(
+                    dto.Category,
+                    dto.Name,
+                    dto.Description,
+                    dto.Instructions,
+                    dto.PreparationTime,
+                    ingredientIds,
+                    userId);
+            }
+            catch (Exception ex)
+            {
+                switch (ex)
+                {
+                    case InvalidNameException:
+                        return BadRequest("Enter valid recipe name!");
+                    case InvalidDescriptionException:
+                        return BadRequest("Enter valid recipe name!");
+                    case InvalidRecipeInstructionsException:
+                        return BadRequest("Enter recipe instructions!");
+                    case EmptyRecipeIngredientsException:
+                        return BadRequest("Specify at least one recipe ingredient");
+                    case InvalidUserIdException:
+                        return Unauthorized("Invalid user id");
+                    case EntityNotFoundException:
+                        return NotFound(ex.Message);
+                    default:
+                        return Problem(ex.Message);
+                }
+            }
+            return Ok("Successfully created new recipe");
+        }
+        [JwtUserAuthorization]
+        [HttpPut]
+        public IActionResult UpdateRecipe(UpdateRecipeDto dto)
+        {
+<<<<<<< HEAD
+            List<Tuple<Guid, int>> ingredientIds = new List<Tuple<Guid, int>>();
+=======
+            var fromDatabase = _recipeService.GetById(dto.Id);
+            if (int.Parse((string)HttpContext.Items["id"] ?? string.Empty) != fromDatabase.UserId)
+            {
+                return Unauthorized("Cannot edit recipes of another user");
+            }
+            List<Tuple<int, int>> ingredientIds = new List<Tuple<int, int>>();
+>>>>>>> main
+            foreach (var ingr in dto.Ingredients)
+            {
+                ingredientIds.Add(new Tuple<Guid, int>(ingr.IngredientId, ingr.Quantity));
+            }
+
+            ingredientIds = ingredientIds.OrderBy(i => i.Item1).ToList();
+            _recipeService.UpdateRecipe(dto.Id,
+                dto.Category,
+                dto.Name,
+                dto.Description,
+                dto.Instructions,
+                dto.PreparationTime,
+                ingredientIds,
+                fromDatabase.UserId);
+            return Ok("Recipe updated successfully");
+        }
+
+        [JwtAdminAuthorization]
+        [HttpDelete]
+        public IActionResult DeleteRecipe(DeleteRecipeDto dto)
+        {
+            var userId = int.Parse((string)HttpContext.Items["id"] ?? string.Empty);
+            bool isAdmin = HttpContext.Items["isAdmin"].Equals("True");
+            var rec = _recipeService.GetById(dto.RecipeId);
+            if (!isAdmin && userId != rec.UserId) return Unauthorized();
+            _recipeService.DeleteRecipe(dto.RecipeId);
+            return Ok();
+        }
+    }
+}
