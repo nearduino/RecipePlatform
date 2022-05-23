@@ -18,9 +18,10 @@ namespace RecipeHub.Infrastructure.Services
         private readonly IArticleRepository _articleRepository;
         private readonly IMapper _mapper;
 
-        public ArticleInfrastructureService(IArticleRepository articleRepository)
+        public ArticleInfrastructureService(IArticleRepository articleRepository, IMapper mapper)
         {
             _articleRepository = articleRepository;
+            _mapper = mapper;
         }
 
         public IEnumerable<Article> GetAll()
@@ -49,7 +50,7 @@ namespace RecipeHub.Infrastructure.Services
 
         public void UpdateArticle(Article article)
         {
-            var fromDatabase = _articleRepository.GetById(article.Id); ;
+            var fromDatabase = _articleRepository.GetById(article.Id);
             var dbo = _mapper.Map<ArticleDbo>(article);
             _mapper.Map(dbo, fromDatabase);
             _articleRepository.Update(fromDatabase);

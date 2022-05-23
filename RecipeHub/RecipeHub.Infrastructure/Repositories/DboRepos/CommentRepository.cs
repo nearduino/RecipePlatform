@@ -21,7 +21,7 @@ namespace RecipeHub.Infrastructure.Repositories
         public CommentDbo getById(Guid id, FetchType fetchType = FetchType.Lazy)
         {
             var comments = GetAll();
-            if (fetchType == FetchType.Eager) { } //return set.Include(c => c.Comments).First(c => c.Id == id);
+            if (fetchType == FetchType.Eager) { }
             return comments.First(c => c.Id == id);
         }
 

@@ -11,6 +11,7 @@ namespace RecipeHub.Infrastructure.AutoMapperProfiles
             CreateMap<CommentDbo, Comment>()
                 .ConstructUsing(c => new Comment(c.Id, c.Rating, c.Text));
             CreateMap<Comment, CommentDbo>();
+            CreateMap<CommentDbo, CommentDbo>().ForMember(c => c.RecipeDboId, opt => opt.Ignore());
         }
     }
 }

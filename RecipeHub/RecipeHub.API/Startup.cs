@@ -67,6 +67,7 @@ namespace RecipeHub.API
             services.AddScoped<ICommentInfrastructureService, CommentInfrastructureService>();
             services.AddScoped<IArticleService, ArticleService>();
             services.AddScoped<IArticleInfrastructureService, ArticleInfrastructureService>();
+            services.AddScoped<ICommentService, CommentService>();
 
             var builder = new ContainerBuilder();
             builder.RegisterAutoMapper(propertiesAutowired: false, AppDomain.CurrentDomain.GetAssemblies());

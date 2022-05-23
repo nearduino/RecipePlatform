@@ -110,7 +110,6 @@ namespace RecipeHub.Domain.Model
             if (Description.Length == 0) throw new InvalidDescriptionException();
             if (Instructions.Length == 0) throw new InvalidRecipeInstructionsException();
             if (_recipeIngredients.Count == 0) throw new EmptyRecipeIngredientsException();
-            //if (UserId <= 0) throw new InvalidUserIdException();
         }
 
         public string GetImage()
@@ -171,6 +170,16 @@ namespace RecipeHub.Domain.Model
         {
             Category = category;
             Validate();
+        }
+
+        public bool UserCommented(Guid userId)
+        {
+            foreach (var comment in _comments)
+            {
+                if (comment.UserId == userId) return true;
+            }
+
+            return false;
         }
     }
 }

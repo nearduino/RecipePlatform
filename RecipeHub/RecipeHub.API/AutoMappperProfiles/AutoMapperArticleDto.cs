@@ -8,9 +8,9 @@ namespace RecipeHub.API.AutoMappperProfiles
     {
         public AutoMapperArticleDto()
         {
-            CreateMap<ArticleDto, Article>()
-                .ConstructUsing(a => new Article(a.Id, a.UserId, a.Title, a.Text));
+            CreateMap<ArticleDto, Article>();
             CreateMap<Article, ArticleDto>();
+            CreateMap<UpdateArticleDto, Article>();
         }
     }
 }

@@ -26,15 +26,15 @@ namespace RecipeHub.API.Controllers
         private readonly IArticleService _articleService;
         private readonly IMapper _mapper;
 
-        public ArticlesController(IArticleService articleService)
+        public ArticlesController(IArticleService articleService, IMapper mapper)
         {
             _articleService = articleService;
+            _mapper = mapper;
         }
 
         [HttpGet]
         public IActionResult GetAll()
         {
-            var id = HttpContext.Items["id"];
             try
             {
                 return Ok(_articleService.GetAll());
@@ -45,7 +45,7 @@ namespace RecipeHub.API.Controllers
             }
         }
 
-        [HttpGet("{id:int}")]
+        [HttpGet("{id:Guid}")]
         public IActionResult GetById(Guid id)
         {
             try
@@ -72,7 +72,9 @@ namespace RecipeHub.API.Controllers
         {
             try
             {
-                _articleService.CreateArticle(_mapper.Map<Article>(dto));
+                var article = _mapper.Map<Article>(dto);
+                article.UserId = Guid.Parse((string)HttpContext.Items["id"] ?? string.Empty);
+                _articleService.CreateArticle(article);
             }
             catch (EntityNotFoundException ex)
             {
@@ -91,11 +93,13 @@ namespace RecipeHub.API.Controllers
 
         [JwtUserAuthorization]
         [HttpPut]
-        public IActionResult UpdateArtcile(UpdateArticleDto dto)
+        public IActionResult UpdateArticle(UpdateArticleDto dto)
         {
             try
             {
-                _articleService.UpdateArticle(_mapper.Map<Article>(dto));
+                var article = _mapper.Map<Article>(dto);
+                article.UserId = article.UserId = Guid.Parse((string)HttpContext.Items["id"] ?? string.Empty);
+                _articleService.UpdateArticle(article);
             }
             catch (EntityNotFoundException ex)
             {
@@ -113,7 +117,7 @@ namespace RecipeHub.API.Controllers
             {
                 return Problem(e.Message);
             }
-            return Ok("Successfully created new article");
+            return Ok("Successfully updated article");
         }
 
         [JwtAdminAuthorization]
@@ -122,7 +126,19 @@ namespace RecipeHub.API.Controllers
         {
             var userId = Guid.Parse((string)HttpContext.Items["id"] ?? string.Empty);
             bool isAdmin = HttpContext.Items["isAdmin"].Equals("True");
-            var art = _articleService.ReadArticle(dto.ArticleId);
+            Article art;
+            try
+            {
+                art = _articleService.ReadArticle(dto.ArticleId);
+            }
+            catch (InvalidOperationException)
+            {
+                return NotFound("Article not found!");
+            }
+            catch (Exception)
+            {
+                return Problem("Ooops, something went wrong, try again later!");
+            }
             if (!isAdmin && userId != art.UserId) return Unauthorized();
             _articleService.DeleteArticle(dto.ArticleId);
             return Ok();

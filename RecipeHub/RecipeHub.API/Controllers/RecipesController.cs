@@ -31,7 +31,6 @@ namespace RecipeHub.API.Controllers
         [HttpGet]
         public IActionResult GetAll()
         {
-            var id = HttpContext.Items["id"];
             try
             {
                 return Ok(_recipeService.GetAll());
@@ -42,7 +41,7 @@ namespace RecipeHub.API.Controllers
             }
         }
 
-        [HttpGet("{id:int}")]
+        [HttpGet("{id:Guid}")]
         public IActionResult GetById(Guid id)
         {
             try
