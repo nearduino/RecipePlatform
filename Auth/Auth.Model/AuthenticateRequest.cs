@@ -10,10 +10,10 @@ namespace Auth.Model
         [Required]
         public string Password { get; set; }
 
-        public AuthenticateRequest(string usr, string pass)
+        public AuthenticateRequest(string username, string password)
         {
-            Username = usr;
-            Password = pass;
+            Username = username;
+            Password = password;
         }
     }
 }

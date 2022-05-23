@@ -19,7 +19,8 @@ namespace Auth.Infrastructure.Mappers
                 dbo.Email,
                 dbo.Password,
                 dbo.IsAdmin,
-                dbo.Id);
+                dbo.Id,
+                dbo.Salt);
         }
 
         public static UserDbo Map(User user)
@@ -33,7 +34,8 @@ namespace Auth.Infrastructure.Mappers
                 UserName = user.UserName,
                 Email = user.Email,
                 Password = user.Password,
-                IsAdmin = user.IsAdmin,               
+                IsAdmin = user.IsAdmin,         
+                Salt = user.Salt
             };
             return dbo;
         }
