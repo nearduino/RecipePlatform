@@ -24,5 +24,15 @@ namespace RecipeHub.Infrastructure.Repositories
             if (fetchType == FetchType.Eager) { } //return set.Include(c => c.Comments).First(c => c.Id == id);
             return comments.First(c => c.Id == id);
         }
+
+        public IEnumerable<CommentDbo> GetByIds(IEnumerable<Guid> ids)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<CommentDbo> GetByRecipeId(Guid recipeId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

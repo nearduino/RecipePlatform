@@ -14,11 +14,14 @@ namespace RecipeHub.Domain.Services.Implementation
     {
         private readonly IRecipeInfrastructureService _recipeInfrastructureService;
         private readonly IIngredientInfrastructureService _ingredientInfrastructureService;
+        private readonly ICommentInfrastructureService _commentInfrastructureService;
 
-        public RecipeService(IRecipeInfrastructureService recipeInfrastructureService, IIngredientInfrastructureService ingredientInfrastructureService)
+        public RecipeService(IRecipeInfrastructureService recipeInfrastructureService, IIngredientInfrastructureService ingredientInfrastructureService, ICommentInfrastructureService commentInfrastructureService)
         {
             _recipeInfrastructureService = recipeInfrastructureService;
             _ingredientInfrastructureService = ingredientInfrastructureService;
+            _commentInfrastructureService = commentInfrastructureService;
+
         }
 
         public IEnumerable<Recipe> GetAll()
@@ -80,6 +83,11 @@ namespace RecipeHub.Domain.Services.Implementation
             if (ingredients.Count() != ingrIds.Count()) throw new EntityNotFoundException("ingredient");
             ingredients = ingredients.OrderBy(i => i.Id);
             return ingredients;
+        }
+
+        private IEnumerable<Comment> GetComments(Guid recipeId)
+        {
+            return _commentInfrastructureService.GetCommentsByRecipeId(recipeId);
         }
     }
 }
