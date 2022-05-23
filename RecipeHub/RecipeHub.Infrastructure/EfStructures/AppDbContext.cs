@@ -12,6 +12,7 @@ namespace RecipeHub.Infrastructure.EfStructures
 {
     public class AppDbContext : DbContext
     {
+        public DbSet<ArticleDbo> Articles { get; set; }
         public DbSet<RecipeDbo> Recipes { get; set; }
         public DbSet<CommentDbo> Comments { get; set; }
         public DbSet<RecipeIngredientDbo> RecipeIngredientDbos { get; set; }

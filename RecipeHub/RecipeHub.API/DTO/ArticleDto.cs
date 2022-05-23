@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using RecipeHub.Domain.Model.Enums;
 
-namespace RecipeHub.Infrastructure.DBO
+namespace RecipeHub.API.DTO
 {
-    public class ArticleDbo
+    public class ArticleDto
     {
         public Guid Id { get; set; }
         public Guid UserId { get; set; }
