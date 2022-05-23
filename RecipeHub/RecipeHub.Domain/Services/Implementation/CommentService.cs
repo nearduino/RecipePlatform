@@ -22,28 +22,20 @@ namespace RecipeHub.Domain.Implementations
         {
         }
 
-        public IEnumerable<Comment> GetAll(Guid recipeId)
-        {
-            return _recipeInfrastructureService.GetById(recipeId).Comments;
-        }
-
         public void CreateComment(Guid userId, Guid recipeId, Comment comment)
         {
-            if (_recipeInfrastructureService.GetById(recipeId).Comments.Contains(comment))
+            /*
+            if (_commentInfrastructureService.GetCommentsByRecipeId(recipeId))
             {
                 throw new CommentException($"User with Id {userId} already posted comment on recipe with Id {recipeId}. CreateComment failed");
             }
+            */
             _recipeInfrastructureService.GetById(recipeId).Comments.Add(comment);
         }
 
-        public Comment ReadComment(Guid userId, Guid recipeId)
+        public IEnumerable<Comment> ReadComments(Guid userId, Guid recipeId)
         {
-            var comments = _recipeInfrastructureService.GetById(recipeId).Comments;
-            if (comments.Find(c => c.Id == userId) == null)
-            {
-                throw new CommentException($"Comment from user with Id {userId} does not exist on recipe with Id {recipeId}. ReadComment failed.");
-            }
-            return comments.Find(c => c.Id == userId);
+            return _commentInfrastructureService.GetCommentsByRecipeId(recipeId);
         }
 
         public void UpdateComment(Guid userId, Guid recipeId, Comment comment)

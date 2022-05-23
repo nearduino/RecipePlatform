@@ -9,10 +9,8 @@ namespace RecipeHub.Domain.InfrasctructureInterfaces
 {
     public interface ICommentInfrastructureService
     {
-        public IEnumerable<Comment> GetAll();
-        public void CreateComment(Comment comment);
-        public Comment ReadComment(Guid id);
-        public void UpdateCommnet(Comment commnet);
-        public void DeleteCommnet(Guid id);
+        public Comment GetById(Guid commentId);
+        public IEnumerable<Comment> GetCommentsByIds(IEnumerable<Guid> ids);
+        public IEnumerable<Comment> GetCommentsByRecipeId(Guid recipeID);
     }
 }

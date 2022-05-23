@@ -30,23 +30,17 @@ namespace RecipeHub.Infrastructure.Services
             return comments;
         }
 
-        public void CreateComment(Comment comment)
+        public Comment GetById(Guid commentId)
         {
             throw new NotImplementedException();
         }
 
-
-        public Comment ReadComment(Guid id)
+        public IEnumerable<Comment> GetCommentsByIds(IEnumerable<Guid> ids)
         {
             throw new NotImplementedException();
         }
 
-        public void UpdateCommnet(Comment commnet)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void DeleteCommnet(Guid id)
+        public IEnumerable<Comment> GetCommentsByRecipeId(Guid recipeID)
         {
             throw new NotImplementedException();
         }
