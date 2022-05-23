@@ -67,12 +67,8 @@ namespace RecipeHub.API.Controllers
         [HttpPost]
         public IActionResult PostRecipe(RecipeDto dto)
         {
-<<<<<<< HEAD
             List<Tuple<Guid, int>>ingredientIds = new List<Tuple<Guid, int>>();
-=======
-            var userId = int.Parse((string)HttpContext.Items["id"] ?? string.Empty);
-            List<Tuple<int, int>>ingredientIds = new List<Tuple<int, int>>();
->>>>>>> main
+            var userId = Guid.Parse((string)HttpContext.Items["id"] ?? string.Empty);
             foreach (var ingr in dto.Ingredients)
             {
                 ingredientIds.Add(new Tuple<Guid, int>(ingr.IngredientId, ingr.Quantity));
@@ -115,16 +111,12 @@ namespace RecipeHub.API.Controllers
         [HttpPut]
         public IActionResult UpdateRecipe(UpdateRecipeDto dto)
         {
-<<<<<<< HEAD
             List<Tuple<Guid, int>> ingredientIds = new List<Tuple<Guid, int>>();
-=======
             var fromDatabase = _recipeService.GetById(dto.Id);
-            if (int.Parse((string)HttpContext.Items["id"] ?? string.Empty) != fromDatabase.UserId)
+            if (!Guid.Parse((string)HttpContext.Items["id"] ?? string.Empty).Equals(fromDatabase.UserId))
             {
                 return Unauthorized("Cannot edit recipes of another user");
             }
-            List<Tuple<int, int>> ingredientIds = new List<Tuple<int, int>>();
->>>>>>> main
             foreach (var ingr in dto.Ingredients)
             {
                 ingredientIds.Add(new Tuple<Guid, int>(ingr.IngredientId, ingr.Quantity));
@@ -146,7 +138,7 @@ namespace RecipeHub.API.Controllers
         [HttpDelete]
         public IActionResult DeleteRecipe(DeleteRecipeDto dto)
         {
-            var userId = int.Parse((string)HttpContext.Items["id"] ?? string.Empty);
+            var userId = Guid.Parse((string)HttpContext.Items["id"] ?? string.Empty);
             bool isAdmin = HttpContext.Items["isAdmin"].Equals("True");
             var rec = _recipeService.GetById(dto.RecipeId);
             if (!isAdmin && userId != rec.UserId) return Unauthorized();
