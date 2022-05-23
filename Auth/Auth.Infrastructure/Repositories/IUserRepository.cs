@@ -10,6 +10,6 @@ namespace Auth.Infrastructure.Repositories
 {
     public interface IUserRepository : IBaseRepository<int, UserDbo>
     {
-        public UserDbo GetById(int id);
+        public UserDbo GetById(Guid id);
     }
 }

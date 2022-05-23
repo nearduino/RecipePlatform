@@ -5,7 +5,7 @@ namespace Auth.Model.Exceptions
 {
    public class LogInException : ArgumentException
     {
-        public LogInException() : base("Wrong username or password!")
+        public LogInException() : base("Username does not exist!")
         {
 
         }

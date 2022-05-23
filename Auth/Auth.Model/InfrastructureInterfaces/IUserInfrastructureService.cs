@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 
 namespace Auth.Model.InfrastructureInterfaces
@@ -7,7 +8,7 @@ namespace Auth.Model.InfrastructureInterfaces
     {
         public IEnumerable<User> GetAll();
         public void SaveUser(User user);
-        public User GetById(int id);
+        public User GetById(Guid id);
     }
 }
 
