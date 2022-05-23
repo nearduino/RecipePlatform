@@ -10,6 +10,7 @@ using Auth.Model;
 using Auth.Model.Exceptions;
 using Auth.Model.InfrastructureInterfaces;
 using System.Security.Cryptography;
+using Auth.Model.Helpers;
 
 namespace Auth.Service
 {
@@ -40,15 +41,26 @@ namespace Auth.Service
             {
                 throw new DatabaseConnectionException();
             }
-            var user = allUsers.SingleOrDefault(x => x.UserName == model.Username && x.Password == model.Password);
+            var user = allUsers.SingleOrDefault(x => x.UserName == model.Username);
+            if (user == null)
+            {
+                throw new LogInException();
+            }
 
-            // return null if user not found
-            if (user == null) throw new LogInException();
+            HashedPassword hashedPassword = new HashedPassword(model.Password, user.Salt);
+            string pass = PassDecoding(hashedPassword);
+
+            if (!pass.Equals(user.Password))
+            {
+                throw new LogInWrongPassException();
+            }
+
 
             // authentication successful so generate jwt token
             var token = generateJwtToken(user);
 
             return token;
+               
         }
 
         public string Register(RegistrationRequest model)
@@ -75,9 +87,11 @@ namespace Auth.Service
                 {
                     throw new EmailIsTakenException();
                 }
-            }              
-          
-            User user = new User(model.FirstName, model.LastName, model.UserName, model.Email, PassEncoding(model.Password), model.IsAdmin);
+            }
+
+            HashedPassword hashedPassword = PassEncoding(model.Password);
+            User user = new User(model.FirstName, model.LastName, model.UserName, model.Email, hashedPassword.Password, model.IsAdmin, hashedPassword.Salt);
+            
             _userInfrastructureService.SaveUser(user);           
 
             // authentication successful so generate jwt token
@@ -91,7 +105,7 @@ namespace Auth.Service
             return _userInfrastructureService.GetAll().ToList();
         }
 
-        public User GetById(int id)
+        public User GetById(Guid id)
         {
             return _userInfrastructureService.GetById(id);
         }
@@ -123,15 +137,26 @@ namespace Auth.Service
             // Return a Base64 string representation of the random number.
             return Convert.ToBase64String(buff);
         }
-        private string PassEncoding(string password)
+        private HashedPassword PassEncoding(string password)
         {
             using (var sha = SHA256.Create())
             {
                 salt = CreateSalt(16);
 
                 var computedHash = sha.ComputeHash(Encoding.Unicode.GetBytes(salt + password));
+                HashedPassword hashedPassword = new HashedPassword(Convert.ToBase64String(computedHash), salt);
 
-                return Convert.ToBase64String(computedHash);
+                return hashedPassword;
+            }
+        }
+        private string PassDecoding(HashedPassword hashedPassword)
+        {
+            using (var sha = SHA256.Create())
+            {               
+                var computedHash = sha.ComputeHash(Encoding.Unicode.GetBytes(hashedPassword.Salt + hashedPassword.Password));
+                string pass = Convert.ToBase64String(computedHash);
+
+                return pass;
             }
         }
     }

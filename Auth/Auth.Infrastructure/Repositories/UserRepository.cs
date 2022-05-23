@@ -14,7 +14,7 @@ namespace Auth.Infrastructure.Repositories
         public UserRepository(AppDbContext context) : base(context)
         {
         }
-        public UserDbo GetById(int id)
+        public UserDbo GetById(Guid id)
         {
             var users = GetAll();           
             return users.First(r => r.Id == id);

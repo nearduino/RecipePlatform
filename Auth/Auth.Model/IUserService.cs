@@ -9,7 +9,7 @@ namespace Auth.Model
     public interface IUserService
     {
         public IEnumerable<User> GetAll();       
-        public User GetById(int id);
+        public User GetById(Guid id);
 
         string Authenticate(AuthenticateRequest model);
         string Register(RegistrationRequest model);

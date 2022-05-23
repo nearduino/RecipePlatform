@@ -2,6 +2,7 @@
 using Auth.Infrastructure.Repositories;
 using Auth.Model;
 using Auth.Model.InfrastructureInterfaces;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -36,7 +37,7 @@ namespace Auth.Service
             _userRepository.Add(Mapper.Map(user));
         }
 
-        public User GetById(int id)
+        public User GetById(Guid id)
         {
             return Mapper.Map(_userRepository.GetById(id));
         }
