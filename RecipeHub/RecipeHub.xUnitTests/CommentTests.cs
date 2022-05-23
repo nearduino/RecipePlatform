@@ -15,13 +15,13 @@ namespace RecipeHub.xUnitTests
     {
         [Theory]
         [MemberData(nameof(CreateArticle_objects))]
-        public void CreateComment_should_throw_exception(Comment c)
+        public void CreateComment_should_throw_exception(Article a)
         {
-            CommentService cs = new CommentService();
+            ArticleService al = new ArticleService();
             bool exceptionThrown = false;
             try
             {
- //               cs.CreateComment(c);
+                al.CreateArticle(a);
             }
             catch (ArticleException)
             {
