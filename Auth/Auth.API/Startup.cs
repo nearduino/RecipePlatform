@@ -39,7 +39,7 @@ namespace Auth.API
 
             services.AddDbContextPool<AppDbContext>(options =>
             {
-                options.UseInMemoryDatabase("RecipeHubDb");
+                options.UseSqlServer(Configuration.GetConnectionString("AuthDatabase"));
             });
 
             services.AddScoped<IUserRepository, UserRepository>();                     
