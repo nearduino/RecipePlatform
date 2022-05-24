@@ -3,12 +3,9 @@ using RecipeHub.Domain.Implementations;
 using RecipeHub.Domain.Model;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Xunit;
 
-namespace RecipeHub.UnitTests
+namespace RecipeHub.xUnitTests
 {
     public class ArticleTests
     {
@@ -22,34 +19,24 @@ namespace RecipeHub.UnitTests
             {
                 al.CreateArticle(a);
             }
-            catch (ArticleException)
+            catch (Exception)
             {
                 exceptionThrown = true;
             }
-            Assert.False(exceptionThrown);
+            Assert.True(exceptionThrown);
         }
 
         public static IEnumerable<object[]> CreateArticle_objects()
         {
             List<object[]> retVal = new List<object[]>();
-            Guid id1 = Guid.Parse("1");
-            Article a1 = new Article(id1, Guid.Parse("1"), "Title 1", "text 1");
+            Guid aId1 = Guid.Parse("128455ee-4b6b-4b62-9b12-e3f17fabb1cb");
+            Guid uId1 = Guid.Parse("f3a7d20d-ed1b-4b97-a4be-4a62865e885b");
+            Article a1 = new Article(aId1, uId1, "Title 1", "text 1");
             retVal.Add(new object[]
             {
                 a1
             }) ;
 
-            Article a2 = new Article(Guid.NewGuid(), Guid.NewGuid(), "Title 2", "text 2");
-            retVal.Add(new object[]
-            {
-                a2
-            });
-            Guid id3 = id1;
-            Article a3 = new Article(id3, Guid.Parse("1"), "Title 3", "text 3");
-            retVal.Add(new object[]
-            {
-                a3
-            });
             return retVal;
         }
 
@@ -63,7 +50,7 @@ namespace RecipeHub.UnitTests
             {
                 al.ReadArticle(id);
             }
-            catch (ArticleException)
+            catch (Exception)
             {
                 exceptionThrown = true;
             }
@@ -75,15 +62,15 @@ namespace RecipeHub.UnitTests
             List<object[]> retVal = new List<object[]>();
             retVal.Add(new object[]
             {
-                1
+                Guid.NewGuid(),
             });
             retVal.Add(new object[]
             {
-                2
+                Guid.NewGuid()
             });
             retVal.Add(new object[]
             {
-                4
+                Guid.NewGuid()
             });
             return retVal;
         }
@@ -98,7 +85,7 @@ namespace RecipeHub.UnitTests
             {
                 al.UpdateArticle(a);
             }
-            catch (ArticleException)
+            catch (Exception)
             {
                 exceptionThrown = true;
             }
@@ -109,19 +96,19 @@ namespace RecipeHub.UnitTests
         {
             List<object[]> retVal = new List<object[]>();
             Guid id1 = Guid.NewGuid();
-            Article a1 = new Article(id1, Guid.Parse("1"), "Title 1e", "text 1e");
+            Article a1 = new Article(id1, Guid.NewGuid(), "Title 1e", "text 1e");
             retVal.Add(new object[]
             {
                 a1
             });
             Guid id2 = Guid.NewGuid();
-            Article a2 = new Article(id2, Guid.Parse("2"), "Title 2e", "text 2e");
+            Article a2 = new Article(id2, Guid.NewGuid(), "Title 2e", "text 2e");
             retVal.Add(new object[]
             {
                 a2
             });
             Guid id3 = id1;
-            Article a3 = new Article(id3, Guid.Parse("1"), "Title 3e", "text 3e");
+            Article a3 = new Article(id3, Guid.NewGuid(), "Title 3e", "text 3e");
             retVal.Add(new object[]
             {
                 a3
@@ -139,7 +126,7 @@ namespace RecipeHub.UnitTests
             {
                 al.DeleteArticle(id);
             }
-            catch (ArticleException)
+            catch (Exception)
             {
                 exceptionThrown = true;
             }
@@ -151,15 +138,15 @@ namespace RecipeHub.UnitTests
             List<object[]> retVal = new List<object[]>();
             retVal.Add(new object[]
             {
-                1
+                Guid.NewGuid()
             });
             retVal.Add(new object[]
             {
-                2
+                Guid.NewGuid()
             });
             retVal.Add(new object[]
             {
-                4
+                Guid.NewGuid()
             });
             return retVal;
         }

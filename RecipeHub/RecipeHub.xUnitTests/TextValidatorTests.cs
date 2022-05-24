@@ -7,7 +7,7 @@ using RecipeHub.Domain.Utilities;
 using Shouldly;
 using Xunit;
 
-namespace RecipeHub.UnitTests
+namespace RecipeHub.xUnitTests
 {
     public class TextValidatorTests
     {
