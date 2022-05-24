@@ -53,19 +53,19 @@ namespace Auth.unitTests
 
            // User u2 = new User("ime 2", "prz 2", "usrnm2", "mail1", "pass2", "pass2", false);
 
-            User u3 = new User("ime 3", "prz 3", "usrnm1", "mail2", "pass3", "pass3", false);
+            User u3 = new User("ime 3", "prz 3", "usrnm1", "mail2", "pass3",  false, "salt");
 
-            User u4 = new User("", "prz 3", "usrnm 4", "mail4", "pass3", "pass3", false);
+            User u4 = new User("", "prz 3", "usrnm 4", "mail4", "pass3",  false, "salt");
 
-            User u5 = new User("ime 4", "", "usrnm 5", "mail5", "pass3", "pass3", false);
+            User u5 = new User("ime 4", "", "usrnm 5", "mail5", "pass3",  false, "salt");
 
-            User u6 = new User("ime 3", "prz 3", "", "mail6", "pass3", "pass3", false);
+            User u6 = new User("ime 3", "prz 3", "", "mail6", "pass3",  false, "salt");
 
-            User u7 = new User("ime 3", "prz 3", "usrnm7", "", "pass", "pass3", false);
+            User u7 = new User("ime 3", "prz 3", "usrnm7", "", "pass", false, "salt");
 
-            User u8 = new User("ime 3", "prz 3", "usrnm 9", "mail9", "", "", false);
+            User u8 = new User("ime 3", "prz 3", "usrnm 9", "mail9", "",  false, "salt");
 
-            User u9 = new User("ime 3", "prz 3", "usrnm 9", "mail9", "pass1", "pass2", false);
+            User u9 = new User("ime 3", "prz 3", "usrnm 9", "mail9", "pass1", false, "salt");
 
             
 
@@ -168,15 +168,15 @@ namespace Auth.unitTests
         {
             List<object[]> retVal = new List<object[]>();
 
-            User u1 = new User("ime 1", "prz 1", "usrnm 1", "mail1", "pass1", true);
+            User u1 = new User("ime 1", "prz 1", "usrnm 1", "mail1", "pass1", true, "salt");
 
-            User u2 = new User("ime 2", "prz 2", "usrnm 2", "mail2", "pass2", false);
+            User u2 = new User("ime 2", "prz 2", "usrnm 2", "mail2", "pass2", false, "salt");
 
-            User u3 = new User("ime 3", "prz 3", "", "mail3", "pass3", false);
+            User u3 = new User("ime 3", "prz 3", "", "mail3", "pass3", false, "salt");
 
-            User u4 = new User("ime 3", "prz 3", "usrnm 4", "mail4", "", false);
+            User u4 = new User("ime 3", "prz 3", "usrnm 4", "mail4", "", false, "salt");
 
-            User u5 = new User("ime 3", "prz 3", "usrnm 5", "mail5", "pass5", false);
+            User u5 = new User("ime 3", "prz 3", "usrnm 5", "mail5", "pass5", false, "salt");
 
             AuthenticateRequest a1 = new AuthenticateRequest(u1.UserName, "nevazeci");
 
