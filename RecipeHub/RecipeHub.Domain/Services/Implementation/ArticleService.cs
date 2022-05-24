@@ -30,10 +30,11 @@ namespace RecipeHub.Domain.Implementations
 
         public void CreateArticle(Article article)
         {
-            /*if (_articleInfrastructureService.ReadArticle(article.Id) != null)
+            IEnumerable<Article> articles = _articleInfrastructureService.GetAll();
+            if (articles.Contains(article))
             {
                 throw new ArticleException($"Article with Id {article.Id} already exists!");
-            }*/
+            }
             _articleInfrastructureService.CreateArticle(article);
             Console.WriteLine("Article {0} added.", article.Title);
         }

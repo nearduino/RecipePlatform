@@ -14,154 +14,33 @@ namespace RecipeHub.xUnitTests
     public class CommentTests
     {
         [Theory]
-        [MemberData(nameof(CreateArticle_objects))]
-        public void CreateComment_should_throw_exception(Article a)
+        [MemberData(nameof(GetCommentsData))]
+        public void Comment_testing(Comment comment)
         {
-            ArticleService al = new ArticleService();
+            CommentService cs = new CommentService();
             bool exceptionThrown = false;
             try
             {
-                al.CreateArticle(a);
+                Guid rId1 = Guid.Parse("1a533389 - cc47 - 43d9 - 9294 - 8d39c1ab4888");
+                cs.CreateComment(comment, rId1);
             }
-            catch (ArticleException)
-            {
-                exceptionThrown = true;
-            }
-            Assert.False(exceptionThrown);
-        }
-
-        public static IEnumerable<object[]> CreateArticle_objects()
-        {
-            List<object[]> retVal = new List<object[]>();
-            Guid id1 = Guid.Parse("1");
-            Article a1 = new Article(id1, Guid.Parse("1"), "Title 1", "text 1");
-            retVal.Add(new object[]
-            {
-                a1
-            });
-
-            Article a2 = new Article(Guid.NewGuid(), Guid.NewGuid(), "Title 2", "text 2");
-            retVal.Add(new object[]
-            {
-                a2
-            });
-            Guid id3 = id1;
-            Article a3 = new Article(id3, Guid.Parse("1"), "Title 3", "text 3");
-            retVal.Add(new object[]
-            {
-                a3
-            });
-            return retVal;
-        }
-
-        [Theory]
-        [MemberData(nameof(ReadArticle_objects))]
-        public void ReadArticle_should_throw_exception(Guid id)
-        {
-            ArticleService al = new ArticleService();
-            bool exceptionThrown = false;
-            try
-            {
-                al.ReadArticle(id);
-            }
-            catch (ArticleException)
+            catch (Exception)
             {
                 exceptionThrown = true;
             }
             Assert.True(exceptionThrown);
         }
 
-        public static IEnumerable<object[]> ReadArticle_objects()
+        public static IEnumerable<object[]> GetCommentsData()
         {
             List<object[]> retVal = new List<object[]>();
+            Guid cId1 = Guid.Parse("e235bec1-e7a7-42bb-9460-de56f6420cdf");
+            Comment c1 = new Comment(cId1, 5, "This is good recipe");
             retVal.Add(new object[]
             {
-                1
+                c1
             });
-            retVal.Add(new object[]
-            {
-                2
-            });
-            retVal.Add(new object[]
-            {
-                4
-            });
-            return retVal;
-        }
 
-        [Theory]
-        [MemberData(nameof(UpdateArticle_objects))]
-        public void UpdateArticle_should_throw_exception(Article a)
-        {
-            ArticleService al = new ArticleService();
-            bool exceptionThrown = false;
-            try
-            {
-                al.UpdateArticle(a);
-            }
-            catch (ArticleException)
-            {
-                exceptionThrown = true;
-            }
-            Assert.True(exceptionThrown);
-        }
-
-        public static IEnumerable<object[]> UpdateArticle_objects()
-        {
-            List<object[]> retVal = new List<object[]>();
-            Guid id1 = Guid.NewGuid();
-            Article a1 = new Article(id1, Guid.Parse("1"), "Title 1e", "text 1e");
-            retVal.Add(new object[]
-            {
-                a1
-            });
-            Guid id2 = Guid.NewGuid();
-            Article a2 = new Article(id2, Guid.Parse("2"), "Title 2e", "text 2e");
-            retVal.Add(new object[]
-            {
-                a2
-            });
-            Guid id3 = id1;
-            Article a3 = new Article(id3, Guid.Parse("1"), "Title 3e", "text 3e");
-            retVal.Add(new object[]
-            {
-                a3
-            });
-            return retVal;
-        }
-
-        [Theory]
-        [MemberData(nameof(DeleteArticle_objects))]
-        public void DeleteArticle_should_throw_exception(Guid id)
-        {
-            ArticleService al = new ArticleService();
-            bool exceptionThrown = false;
-            try
-            {
-                al.DeleteArticle(id);
-            }
-            catch (ArticleException)
-            {
-                exceptionThrown = true;
-            }
-            Assert.True(exceptionThrown);
-        }
-
-        public static IEnumerable<object[]> DeleteArticle_objects()
-        {
-            List<object[]> retVal = new List<object[]>();
-            retVal.Add(new object[]
-            {
-                1
-            });
-            retVal.Add(new object[]
-            {
-                2
-            });
-            retVal.Add(new object[]
-            {
-                4
-            });
             return retVal;
         }
     }

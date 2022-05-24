@@ -28,12 +28,6 @@ namespace RecipeHub.Domain.Implementations
 
         public void CreateComment(Comment comment, Guid recipeId)
         {
-            /*
-            if (_commentInfrastructureService.GetCommentsByRecipeId(recipeId))
-            {
-                throw new CommentException($"User with Id {userId} already posted comment on recipe with Id {recipeId}. CreateComment failed");
-            }
-            */
             Recipe recipe;
             try
             {

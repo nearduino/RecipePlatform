@@ -9,7 +9,7 @@ using RecipeHub.Domain.Model.Exceptions;
 using Shouldly;
 using Xunit;
 
-namespace RecipeHub.UnitTests
+namespace RecipeHub.xUnitTests
 {
     public class RecipeTests
     {

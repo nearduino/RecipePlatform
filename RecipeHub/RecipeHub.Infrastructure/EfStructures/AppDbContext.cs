@@ -20,36 +20,36 @@ namespace RecipeHub.Infrastructure.EfStructures
 
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {
-            IngredientDbo ingr = new IngredientDbo
-            {
-                CaloriesPerUnit = 10,
-                MeasureUnit = MeasureUnit.g,
-                Name = "Lala"
-            };
-            IngredientDbo ingr2 = new IngredientDbo
-            {
-                CaloriesPerUnit = 20,
-                MeasureUnit = MeasureUnit.ml,
-                Name = "Bla"
-            };
-            Ingredients.Add(ingr);
-            Ingredients.Add(ingr2);
-            SaveChanges();
-            RecipeDbo rec = new RecipeDbo
-            {
-                Name = "Sa visnjom burek",
-                Category = Category.Breakfast,
-                CommentsDbo = new List<CommentDbo> { new CommentDbo { Rating = 10, Text = "Sjajno" } },
-                Description = "Ovo je burek punjen visnjama",
-                ImgSrc = "",
-                Instructions = "Stavis visnje u burek",
-                PreparationTime = 30,
-                UserId = Guid.Parse("5f5ea2d2-8eb3-4b01-8115-b3d44d9eb342"),
-                RecipeIngredientsDbo = new List<RecipeIngredientDbo>()
-            };
-            rec.RecipeIngredientsDbo.Add(new RecipeIngredientDbo{IngredientDbo = ingr, Quantity = 2});
-            Recipes.Add(rec);
-            SaveChanges();
+            //IngredientDbo ingr = new IngredientDbo
+            //{
+            //    CaloriesPerUnit = 10,
+            //    MeasureUnit = MeasureUnit.g,
+            //    Name = "Lala"
+            //};
+            //IngredientDbo ingr2 = new IngredientDbo
+            //{
+            //    CaloriesPerUnit = 20,
+            //    MeasureUnit = MeasureUnit.ml,
+            //    Name = "Bla"
+            //};
+            //Ingredients.Add(ingr);
+            //Ingredients.Add(ingr2);
+            //SaveChanges();
+            //RecipeDbo rec = new RecipeDbo
+            //{
+            //    Name = "Sa visnjom burek",
+            //    Category = Category.Breakfast,
+            //    CommentsDbo = new List<CommentDbo> { new CommentDbo { Rating = 10, Text = "Sjajno" } },
+            //    Description = "Ovo je burek punjen visnjama",
+            //    ImgSrc = "",
+            //    Instructions = "Stavis visnje u burek",
+            //    PreparationTime = 30,
+            //    UserId = Guid.Parse("5f5ea2d2-8eb3-4b01-8115-b3d44d9eb342"),
+            //    RecipeIngredientsDbo = new List<RecipeIngredientDbo>()
+            //};
+            //rec.RecipeIngredientsDbo.Add(new RecipeIngredientDbo{IngredientDbo = ingr, Quantity = 2});
+            //Recipes.Add(rec);
+            //SaveChanges();
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
