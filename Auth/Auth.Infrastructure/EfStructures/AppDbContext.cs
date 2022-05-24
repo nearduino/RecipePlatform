@@ -15,18 +15,7 @@ namespace Auth.Infrastructure.EfStructures
 
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {        
-              
-            UserDbo user = new UserDbo
-            {
-                FirstName = "Djordje",
-                LastName = "Djukic",
-                UserName = "djuka6",
-                Email = "djukicdjordje98@gmail.com",
-                IsAdmin = true,
-                Password = "12345"              
-            };            
-            Users.Add(user);
-            SaveChanges();
+
         }       
 
     }
