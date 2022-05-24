@@ -6,7 +6,6 @@ namespace RecipeHub.API.DTO
 {
     public class RecipeDto
     {
-        public Guid UserId { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
         public string Instructions { get; set; }

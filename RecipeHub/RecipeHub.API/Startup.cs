@@ -23,6 +23,9 @@ using RecipeHub.Domain.Services.Implementation;
 using RecipeHub.Infrastructure.EfStructures;
 using RecipeHub.Infrastructure.Repositories;
 using RecipeHub.Infrastructure.Services;
+using RecipeHub.Domain.Abstractions;
+using RecipeHub.Domain.Implementations;
+using RecipeHub.Infrastructure.Repositories.DboRepos;
 
 namespace RecipeHub.API
 {
@@ -57,9 +60,14 @@ namespace RecipeHub.API
             services.AddScoped<IRecipeRepository, RecipeRepository>();
             services.AddScoped<IIngredientRepository, IngredientRepository>();
             services.AddScoped<ICommentRepository, CommentRepository>();
+            services.AddScoped<IArticleRepository, ArticleRepository>();
             services.AddScoped<IRecipeInfrastructureService, RecipeInfrastructureService>();
             services.AddScoped<IIngredientInfrastructureService, IngredientInfrastructureService>();
             services.AddScoped<IRecipeService, RecipeService>();
+            services.AddScoped<ICommentInfrastructureService, CommentInfrastructureService>();
+            services.AddScoped<IArticleService, ArticleService>();
+            services.AddScoped<IArticleInfrastructureService, ArticleInfrastructureService>();
+            services.AddScoped<ICommentService, CommentService>();
 
             var builder = new ContainerBuilder();
             builder.RegisterAutoMapper(propertiesAutowired: false, AppDomain.CurrentDomain.GetAssemblies());

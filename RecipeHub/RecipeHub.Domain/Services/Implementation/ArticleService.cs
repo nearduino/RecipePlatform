@@ -30,10 +30,10 @@ namespace RecipeHub.Domain.Implementations
 
         public void CreateArticle(Article article)
         {
-            if (_articleInfrastructureService.ReadArticle(article.Id) != null)
+            /*if (_articleInfrastructureService.ReadArticle(article.Id) != null)
             {
                 throw new ArticleException($"Article with Id {article.Id} already exists!");
-            }
+            }*/
             _articleInfrastructureService.CreateArticle(article);
             Console.WriteLine("Article {0} added.", article.Title);
         }
@@ -50,16 +50,15 @@ namespace RecipeHub.Domain.Implementations
 
         public void UpdateArticle(Article article)
         {
-            if (_articleInfrastructureService.ReadArticle(article.Id) == null)
+            try
             {
-                throw new ArticleException($"Article with Id {article.Id} is not found!");
-
+                var art = _articleInfrastructureService.ReadArticle(article.Id);
             }
-            Article a = new Article();
-            a.Id = article.Id;
-            a.Title = article.Title;
-            a.Text = article.Text;
-            _articleInfrastructureService.UpdateArticle(a);
+            catch (InvalidOperationException)
+            {
+                throw new ArticleException($"Article not found!");
+            }
+            _articleInfrastructureService.UpdateArticle(article);
             Console.WriteLine("Article with Id {0} updated.", article.Id);
         }
 

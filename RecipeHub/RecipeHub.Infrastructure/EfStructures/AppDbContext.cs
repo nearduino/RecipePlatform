@@ -12,6 +12,7 @@ namespace RecipeHub.Infrastructure.EfStructures
 {
     public class AppDbContext : DbContext
     {
+        public DbSet<ArticleDbo> Articles { get; set; }
         public DbSet<RecipeDbo> Recipes { get; set; }
         public DbSet<CommentDbo> Comments { get; set; }
         public DbSet<RecipeIngredientDbo> RecipeIngredientDbos { get; set; }
@@ -43,7 +44,7 @@ namespace RecipeHub.Infrastructure.EfStructures
                 ImgSrc = "",
                 Instructions = "Stavis visnje u burek",
                 PreparationTime = 30,
-                UserId = Guid.NewGuid(),
+                UserId = Guid.Parse("5f5ea2d2-8eb3-4b01-8115-b3d44d9eb342"),
                 RecipeIngredientsDbo = new List<RecipeIngredientDbo>()
             };
             rec.RecipeIngredientsDbo.Add(new RecipeIngredientDbo{IngredientDbo = ingr, Quantity = 2});

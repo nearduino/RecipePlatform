@@ -33,19 +33,19 @@ namespace RecipeHub.UnitTests
         {
             List<object[]> retVal = new List<object[]>();
             Guid id1 = Guid.Parse("1");
-            Article a1 = new Article(id1, "Title 1", "text 1");
+            Article a1 = new Article(id1, Guid.Parse("1"), "Title 1", "text 1");
             retVal.Add(new object[]
             {
                 a1
             }) ;
 
-            Article a2 = new Article(Guid.NewGuid(), "Title 2", "text 2");
+            Article a2 = new Article(Guid.NewGuid(), Guid.NewGuid(), "Title 2", "text 2");
             retVal.Add(new object[]
             {
                 a2
             });
             Guid id3 = id1;
-            Article a3 = new Article(id3, "Title 3", "text 3");
+            Article a3 = new Article(id3, Guid.Parse("1"), "Title 3", "text 3");
             retVal.Add(new object[]
             {
                 a3
@@ -109,19 +109,19 @@ namespace RecipeHub.UnitTests
         {
             List<object[]> retVal = new List<object[]>();
             Guid id1 = Guid.NewGuid();
-            Article a1 = new Article(id1, "Title 1e", "text 1e");
+            Article a1 = new Article(id1, Guid.Parse("1"), "Title 1e", "text 1e");
             retVal.Add(new object[]
             {
                 a1
             });
             Guid id2 = Guid.NewGuid();
-            Article a2 = new Article(id2, "Title 2e", "text 2e");
+            Article a2 = new Article(id2, Guid.Parse("2"), "Title 2e", "text 2e");
             retVal.Add(new object[]
             {
                 a2
             });
             Guid id3 = id1;
-            Article a3 = new Article(id3, "Title 3e", "text 3e");
+            Article a3 = new Article(id3, Guid.Parse("1"), "Title 3e", "text 3e");
             retVal.Add(new object[]
             {
                 a3

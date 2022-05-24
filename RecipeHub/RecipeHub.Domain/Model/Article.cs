@@ -9,6 +9,7 @@ namespace RecipeHub.Domain.Model
     public class Article
     {
         public Guid Id { get; set; }
+        public Guid UserId { get; set; }
         public string Title { get; set; }
         public string Text { get; set; }
 
@@ -17,9 +18,10 @@ namespace RecipeHub.Domain.Model
 
         }
 
-        public Article(Guid id, string title, string text)
+        public Article(Guid id, Guid userId, string title, string text)
         {
             Id = id;
+            UserId = userId;
             Title = title;
             Text = text;
         }

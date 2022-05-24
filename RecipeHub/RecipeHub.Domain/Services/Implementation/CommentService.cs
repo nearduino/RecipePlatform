@@ -3,7 +3,11 @@ using RecipeHub.Domain.Exceptions;
 using RecipeHub.Domain.InfrasctructureInterfaces;
 using RecipeHub.Domain.Model;
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using System.Net.Http.Headers;
+using RecipeHub.Domain.Model.Exceptions;
 
 namespace RecipeHub.Domain.Implementations
 {
@@ -22,7 +26,7 @@ namespace RecipeHub.Domain.Implementations
         {
         }
 
-        public void CreateComment(Guid userId, Guid recipeId, Comment comment)
+        public void CreateComment(Comment comment, Guid recipeId)
         {
             /*
             if (_commentInfrastructureService.GetCommentsByRecipeId(recipeId))
@@ -30,7 +34,18 @@ namespace RecipeHub.Domain.Implementations
                 throw new CommentException($"User with Id {userId} already posted comment on recipe with Id {recipeId}. CreateComment failed");
             }
             */
-            _recipeInfrastructureService.GetById(recipeId).Comments.Add(comment);
+            Recipe recipe;
+            try
+            {
+                recipe = _recipeInfrastructureService.GetById(recipeId);
+            }
+            catch (InvalidOperationException)
+            {
+                throw new EntityNotFoundException("Recipe");
+            }
+
+            if (recipe.UserCommented(comment.UserId)) throw new UserAlreadyCommentedException();
+            _commentInfrastructureService.CreateComment(comment, recipeId);
         }
 
         public IEnumerable<Comment> ReadComments(Guid userId, Guid recipeId)
@@ -38,15 +53,17 @@ namespace RecipeHub.Domain.Implementations
             return _commentInfrastructureService.GetCommentsByRecipeId(recipeId);
         }
 
-        public void UpdateComment(Guid userId, Guid recipeId, Comment comment)
+        public void UpdateComment(Comment comment)
         {
-            if (_recipeInfrastructureService.GetById(recipeId).Comments.Find(c => c.Id == userId) == null)
-            {
-                throw new CommentException($"Comment from user with Id {userId} does not exist on recipe with Id {recipeId}. UpdateComment failed.");
-            }
-            _recipeInfrastructureService.GetById(recipeId).Comments.Find(c => c.Id == userId).Id = comment.Id;
-            _recipeInfrastructureService.GetById(recipeId).Comments.Find(c => c.Id == userId).Rating = comment.Rating;
-            _recipeInfrastructureService.GetById(recipeId).Comments.Find(c => c.Id == userId).Text = comment.Text;
+            var fromDatabase = _commentInfrastructureService.GetById(comment.Id);
+            fromDatabase.Rating = comment.Rating;
+            fromDatabase.Text = comment.Text;
+            _commentInfrastructureService.Update(comment);
+        }
+
+        public void DeleteComment(Guid commentId)
+        {
+            _commentInfrastructureService.Delete(commentId);
         }
 
         public void DeleteComment(Guid userId, Guid recipeId)
@@ -57,6 +74,23 @@ namespace RecipeHub.Domain.Implementations
             }
             var comment = _recipeInfrastructureService.GetById(recipeId).Comments.Find(c => c.Id == userId);
             _recipeInfrastructureService.GetById(recipeId).Comments.Remove(comment);
+        }
+
+        public IEnumerable GetAll()
+        {
+            return _commentInfrastructureService.GetAll().ToList();
+        }
+
+        public Comment GetById(Guid commentId)
+        {
+            try
+            {
+                return _commentInfrastructureService.GetById(commentId);
+            }
+            catch (InvalidOperationException)
+            {
+                throw new EntityNotFoundException("Comment");
+            }
         }
     }
 }

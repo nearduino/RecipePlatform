@@ -101,7 +101,7 @@ namespace RecipeHub.Infrastructure.Mappers
         public static Article Map(ArticleDbo dbo)
         {
             if (dbo == null) return null;
-            return new Article(dbo.Id, dbo.Title, dbo.Text);
+            return new Article(dbo.Id, dbo.UserId, dbo.Title, dbo.Text);
         }
 
         public static ArticleDbo Map(Article article)
