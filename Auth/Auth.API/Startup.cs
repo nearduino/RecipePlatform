@@ -39,7 +39,7 @@ namespace Auth.API
 
             services.AddDbContextPool<AppDbContext>(options =>
             {               
-                options.UseSqlServer(Configuration.GetValue<string>("ConnectionStrings:AuthDatabase"));
+                options.UseSqlServer("Server=tcp:internship-sql.database.windows.net,1433;Initial Catalog=Authorization;Persist Security Info=False;User ID=InternshipAdmin;Password=Levi9Internship;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
             });
 
             services.AddScoped<IUserRepository, UserRepository>();                     
