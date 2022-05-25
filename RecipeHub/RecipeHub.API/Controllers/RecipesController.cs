@@ -4,11 +4,13 @@ using System.Linq;
 using System.Net;
 using System.Reflection.Metadata;
 using System.Reflection.Metadata.Ecma335;
+using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using RecipeHub.API.Attributes;
 using RecipeHub.API.DTO;
 using RecipeHub.Domain.Model;
+using RecipeHub.Domain.Model.Enums;
 using RecipeHub.Domain.Model.Exceptions;
 using RecipeHub.Domain.Services;
 using RecipeHub.Infrastructure.DBO;
@@ -22,10 +24,12 @@ namespace RecipeHub.API.Controllers
     public class RecipesController : ControllerBase
     {
         private readonly IRecipeService _recipeService;
+        private readonly IMapper _mapper;
 
-        public RecipesController(IRecipeService recipeService)
+        public RecipesController(IRecipeService recipeService, IMapper mapper)
         {
             _recipeService = recipeService;
+            _mapper = mapper;
         }
 
         [HttpGet]
@@ -33,7 +37,7 @@ namespace RecipeHub.API.Controllers
         {
             try
             {
-                return Ok(_recipeService.GetAll());
+                return Ok(_mapper.Map<IEnumerable<RecipeDto>>(_recipeService.GetAll()));
             }
             catch (Exception ex)
             {
@@ -64,7 +68,7 @@ namespace RecipeHub.API.Controllers
 
         [JwtUserAuthorization]
         [HttpPost]
-        public IActionResult PostRecipe(RecipeDto dto)
+        public IActionResult PostRecipe(NewRecipeDto dto)
         {
             List<Tuple<Guid, int>>ingredientIds = new List<Tuple<Guid, int>>();
             var userId = Guid.Parse((string)HttpContext.Items["id"] ?? string.Empty);
