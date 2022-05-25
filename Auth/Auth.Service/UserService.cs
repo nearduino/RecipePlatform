@@ -92,10 +92,11 @@ namespace Auth.Service
             HashedPassword hashedPassword = PassEncoding(model.Password);
             User user = new User(model.FirstName, model.LastName, model.UserName, model.Email, hashedPassword.Password, model.IsAdmin, hashedPassword.Salt);
             
-            _userInfrastructureService.SaveUser(user);           
-
+            _userInfrastructureService.SaveUser(user);
+            allUsers = _userInfrastructureService.GetAll();
+            User userForToken = allUsers.SingleOrDefault(x => x.UserName == model.UserName);
             // authentication successful so generate jwt token
-            var token = generateJwtToken(user);
+            var token = generateJwtToken(userForToken);
 
             return token;
         }              
