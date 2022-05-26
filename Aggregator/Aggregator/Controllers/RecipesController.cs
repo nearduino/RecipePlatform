@@ -4,13 +4,14 @@ using Newtonsoft.Json;
 using RecipeHub.API.DTO;
 using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace Aggregator.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     public class RecipesController : BaseAggregatorController
     {
         private static readonly string[] Summaries = new[]
@@ -26,8 +27,8 @@ namespace Aggregator.Controllers
         }
 
 
-        [HttpGet]
-        public async Task<IActionResult> GetUsers()
+        [HttpPost]
+        public async Task<IActionResult> GetRecipes()
         {
             // Call asynchronous network methods in a try/catch block to handle exceptions.
             try
@@ -59,14 +60,27 @@ namespace Aggregator.Controllers
 
 
                 }
-
-
             }
             catch (HttpRequestException e)
             {
                 Console.WriteLine("\nException Caught!");
                 Console.WriteLine("Message :{0} ", e.Message);
                 return BadRequest();
+            }
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetAll()
+        {
+            var result = await _httpClient.GetAsync(_recipeHubBaseUrl + "Recipes");
+            var returnValue = await result.Content.ReadAsStringAsync();
+            switch (result.StatusCode)
+            {
+                case HttpStatusCode.NotFound: return NotFound(await result.Content.ReadAsStringAsync());
+                case HttpStatusCode.InternalServerError: return Problem(await result.Content.ReadAsStringAsync());
+                case HttpStatusCode.BadRequest: return BadRequest(await result.Content.ReadAsStringAsync());
+                case HttpStatusCode.Unauthorized: return Unauthorized(await result.Content.ReadAsStringAsync());
+                default: return Ok(JsonConvert.DeserializeObject<List<NewRecipeDto>>(returnValue));
             }
         }
     }
