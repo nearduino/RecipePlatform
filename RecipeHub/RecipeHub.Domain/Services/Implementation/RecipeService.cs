@@ -32,7 +32,8 @@ namespace RecipeHub.Domain.Services.Implementation
         public void CreateNewRecipe(Category category, string name, string description, string instructions, uint preparationTime,
             IEnumerable<Tuple<Guid, int>> recipeIngredientIds, Guid userId)
         {
-            var ingrIds = recipeIngredientIds as Tuple<Guid, int>[] ?? recipeIngredientIds.ToArray();
+            var ingrIdsArray = recipeIngredientIds as Tuple<Guid, int>[] ?? recipeIngredientIds.ToArray();
+            var ingrIds = ingrIdsArray.OrderBy(i => i.Item1).ToList();
             var ingredients = ExtractIngredients(ingrIds);
             List<RecipeIngredient> recipeIngredients = new List<RecipeIngredient>();
             foreach (var recipeIngredient in ingredients.Zip(ingrIds))
@@ -52,7 +53,8 @@ namespace RecipeHub.Domain.Services.Implementation
         public void UpdateRecipe(Guid id, Category category, string name, string description, string instructions, uint preparationTime,
             IEnumerable<Tuple<Guid, int>> recipeIngredientIds, Guid userId)
         {
-            var ingrIds = recipeIngredientIds as Tuple<Guid, int>[] ?? recipeIngredientIds.ToArray();
+            var ingrIdsArray = recipeIngredientIds as Tuple<Guid, int>[] ?? recipeIngredientIds.ToArray();
+            var ingrIds = ingrIdsArray.OrderBy(i => i.Item1).ToList();
             var ingredients = ExtractIngredients(ingrIds);
             List<RecipeIngredient> recipeIngredients = new List<RecipeIngredient>();
             foreach (var recipeIngredient in ingredients.Zip(ingrIds))
@@ -75,7 +77,7 @@ namespace RecipeHub.Domain.Services.Implementation
             _recipeInfrastructureService.Delete(id);
         }
 
-        private IEnumerable<Ingredient> ExtractIngredients(Tuple<Guid, int>[] ingrIds)
+        private IEnumerable<Ingredient> ExtractIngredients(IEnumerable<Tuple<Guid, int>> ingrIds)
         {
             List<Guid> ingredientIds = new List<Guid>();
             foreach (var ingrId in ingrIds) ingredientIds.Add(ingrId.Item1);

@@ -12,6 +12,6 @@ namespace RecipeHub.API.DTO
         public string Instructions { get; set; }
         public Category Category { get; set; }
         public uint PreparationTime { get; set; }
-        public IEnumerable<RecipeIngredientDto> Ingredients { get; set; }
+        public IEnumerable<NewRecipeIngredientDto> Ingredients { get; set; }
     }
 }

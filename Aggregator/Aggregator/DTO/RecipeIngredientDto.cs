@@ -1,10 +1,8 @@
-﻿using System;
-
-namespace RecipeHub.API.DTO
+﻿namespace Aggregator.DTO
 {
     public class RecipeIngredientDto
     {
-        public Guid IngredientId { get; set; }
         public int Quantity { get; set; }
+        public IngredientDto Ingredient { get; set; }
     }
 }
