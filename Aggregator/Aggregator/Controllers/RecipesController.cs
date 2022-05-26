@@ -16,9 +16,8 @@ namespace Aggregator.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class RecipesController : ControllerBase
+    public class RecipesController : BaseAggregatorController
     {
-        private static HttpClient _httpClient = new HttpClient();
         private static readonly string[] Summaries = new[]
         {
             "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
@@ -38,32 +37,12 @@ namespace Aggregator.Controllers
             // Call asynchronous network methods in a try/catch block to handle exceptions.
             try
             {
-
-            
-                var json= new LogIn
-                {
-                    Username = "dave",
-                    Password = "hamburgeri98/A"
-                };
-                using (var content = new StringContent(JsonConvert.SerializeObject(json), System.Text.Encoding.UTF8, "application/json"))
-                {
-                    HttpResponseMessage result = _httpClient.PostAsync("https://internship-auth.azurewebsites.net/api/users/authenticate", content).Result;
-                    
-                        string returnValue = result.Content.ReadAsStringAsync().Result;
-                    // return Ok(returnValue);
-                    LogInResponse? response = System.Text.Json.JsonSerializer.Deserialize<LogInResponse>(returnValue);
-                    _httpClient.DefaultRequestHeaders.Add("token", response.token);
-
-
-                }
+                LogIn();
                 var ingredient = new RecipeIngredientDto
                 {
                     IngredientId = Guid.Parse("175dabcf-8e55-47a9-84ac-8f832646bdc7"),
                     Quantity = 2
-
-
                 };
-               
                 var recipe = new NewRecipeDto
                 {
                     Name = "Recept",
@@ -71,17 +50,17 @@ namespace Aggregator.Controllers
                     Instructions = "instrukcijeblabla",
                     Category = RecipeHub.Domain.Model.Enums.Category.Lunch,
                     PreparationTime = 30,
-                    Ingredients = new List<RecipeIngredientDto> { ingredient}
+                    Ingredients = new List<RecipeIngredientDto> { ingredient }
 
                 };
                 using (var content = new StringContent(JsonConvert.SerializeObject(recipe), System.Text.Encoding.UTF8, "application/json"))
                 {
-                    
+
                     HttpResponseMessage result = _httpClient.PostAsync("https://internship-recipes.azurewebsites.net/api/Recipes", content).Result;
 
                     string returnValue = result.Content.ReadAsStringAsync().Result;
-                     return Ok(returnValue);
-                   
+                    return Ok(returnValue);
+
 
 
                 }
@@ -96,10 +75,10 @@ namespace Aggregator.Controllers
             }
         }
         /*[HttpGet("users")]
-        public IActionResult PostRecipes(NewRecipeDto model)
-        {
-            GetUsers();
+public IActionResult PostRecipes(NewRecipeDto model)
+{
+   GetUsers();
 
-        }*/
+}*/
     }
 }
