@@ -1,4 +1,5 @@
 ﻿using System.Net.Http;
+using System.Text;
 using Aggregator.DTO;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -7,6 +8,7 @@ namespace Aggregator.Controllers
 {
     public class BaseAggregatorController : ControllerBase
     {
+        protected string _recipeHubBaseUrl => "https://internship-recipes.azurewebsites.net/api/";
         protected static HttpClient _httpClient = new HttpClient();
         protected void LogIn()
         {
@@ -23,6 +25,13 @@ namespace Aggregator.Controllers
                 _httpClient.DefaultRequestHeaders.Add("token", response.token);
             }
         }
-        
+        protected StringContent GetContent(object content)
+        {
+            return new StringContent(JsonConvert.SerializeObject(content, settings: new JsonSerializerSettings()
+            {
+                ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+            }), Encoding.UTF8, "application/json");
+        }
+
     }
 }
