@@ -74,11 +74,5 @@ namespace Aggregator.Controllers
                 return BadRequest();
             }
         }
-        /*[HttpGet("users")]
-public IActionResult PostRecipes(NewRecipeDto model)
-{
-   GetUsers();
-
-}*/
     }
 }
