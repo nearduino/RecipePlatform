@@ -1,10 +1,9 @@
 ﻿using System;
 
-namespace Aggregator.DTO
+namespace RecipeHub.API.DTO
 {
-    public class CommentDto
+    public class NewCommentDto
     {
-        public Guid Id { get; set; }
         public Guid RecipeId { get; set; }
         public uint Rating { get; set; }
         public string Text { get; set; }
