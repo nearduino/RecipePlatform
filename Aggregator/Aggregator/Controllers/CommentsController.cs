@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Aggregator.DTO;
 
 namespace Aggregator.Controllers
 {
@@ -25,7 +26,7 @@ namespace Aggregator.Controllers
                 case HttpStatusCode.InternalServerError: return Problem(await result.Content.ReadAsStringAsync());
                 case HttpStatusCode.BadRequest: return BadRequest(await result.Content.ReadAsStringAsync());
                 case HttpStatusCode.Unauthorized: return Unauthorized(await result.Content.ReadAsStringAsync());
-                default: return Ok(JsonConvert.DeserializeObject<List<NewCommentDto>>(returnValue));
+                default: return Ok(JsonConvert.DeserializeObject<List<CommentDto>>(returnValue));
             }
         }
 
@@ -39,7 +40,7 @@ namespace Aggregator.Controllers
                 case HttpStatusCode.InternalServerError: return Problem(await result.Content.ReadAsStringAsync());
                 case HttpStatusCode.BadRequest: return BadRequest(await result.Content.ReadAsStringAsync());
                 case HttpStatusCode.Unauthorized: return Unauthorized(await result.Content.ReadAsStringAsync());
-                default: return Ok(JsonConvert.DeserializeObject<NewCommentDto>(await result.Content.ReadAsStringAsync()));
+                default: return Ok(JsonConvert.DeserializeObject<CommentDto>(await result.Content.ReadAsStringAsync()));
             }
         }
 
