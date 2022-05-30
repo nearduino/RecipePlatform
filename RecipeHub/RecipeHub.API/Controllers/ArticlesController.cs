@@ -1,9 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Reflection.Metadata;
-using System.Reflection.Metadata.Ecma335;
 using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -12,10 +7,6 @@ using RecipeHub.API.DTO;
 using RecipeHub.Domain.Abstractions;
 using RecipeHub.Domain.Model;
 using RecipeHub.Domain.Model.Exceptions;
-using RecipeHub.Domain.Services;
-using RecipeHub.Infrastructure.DBO;
-using RecipeHub.Infrastructure.Repositories;
-using RecipeHub.Infrastructure.Repositories.Enums;
 
 namespace RecipeHub.API.Controllers
 {
